@@ -4,7 +4,7 @@
 .bg{opacity:0;animation:in .4s ease-out forwards}
 .s{fill:none;stroke:#0A0A0A;stroke-width:14.2;stroke-dasharray:1;stroke-dashoffset:1;animation:draw 1s cubic-bezier(.65,0,.35,1) .15s forwards}
 .n{fill:#FFFFFF;opacity:0;transform:translateY(14px);animation:rise .75s cubic-bezier(.16,1,.3,1) .7s forwards}
-.f{fill:#8A8A8A;transform-box:fill-box;transform-origin:0 0;transform:scaleX(0);animation:turn .5s cubic-bezier(.16,1,.3,1) 1.3s forwards}
+.f{fill:#25A85E;transform-box:fill-box;transform-origin:0 0;transform:scaleX(0);animation:turn .5s cubic-bezier(.16,1,.3,1) 1.3s forwards}
 .sh{transform:translateX(-70px);animation:shine 7s cubic-bezier(.4,0,.2,1) 1.85s infinite}
 @keyframes in{to{opacity:1}}
 @keyframes draw{to{stroke-dashoffset:0}}
