@@ -6,8 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import DecryptedText from "@/components/DecryptedText";
 import Magnet from "@/components/Magnet";
-import Noise from "@/components/Noise";
-import { lenisRef } from "@/components/lenis-scroll";
+import { glideTo, useScrollAnchors } from "@/components/use-scroll-anchors";
 import s from "./home-hero.module.css";
 
 const NAV = [
@@ -37,10 +36,6 @@ const inOut = (t: number) => (t < 0.5 ? 8 * t ** 4 : 1 - Math.pow(-2 * t + 2, 4)
 const LOGO_X = 28, LOGO_Y = 18, LOGO_W = 48;
 // How quickly the drawn progress catches up with the real scroll (per second).
 const FOLLOW = 14;
-// One gesture glides between the two sections: travel time (s) and quiet time
-// after landing (ms) that swallows trackpad inertia.
-const GLIDE = 2.4, SETTLE_MS = 700;
-const DOWN = ["ArrowDown", "PageDown", "End", " "], UP = ["ArrowUp", "PageUp", "Home"];
 
 export function HomeHero() {
     const stageRef = useRef<HTMLElement>(null);
@@ -152,91 +147,21 @@ export function HomeHero() {
         };
     }, []);
 
-    // Anchored scroll: the stage has two resting points, its top (section 1)
-    // and its end (section 2). Wheel, keys and swipes glide from one to the
-    // other; a scrollbar drag that stops halfway settles on the nearer one.
-    useEffect(() => {
-        const stage = stageRef.current;
-        if (!stage) return;
-        const anchors = () => [stage.offsetTop, stage.offsetTop + stage.offsetHeight - window.innerHeight];
-        let busy = false, quietUntil = 0, idle = 0, touchY: number | null = null;
-
-        const go = (dir: number) => {
-            const lenis = lenisRef.current;
-            const [top, end] = anchors(), to = dir > 0 ? end : top;
-            if (!lenis || Math.abs(window.scrollY - to) < 2) return;
-            busy = true;
-            lenis.scrollTo(to, {
-                duration: GLIDE, easing: inOut, lock: true, force: true,
-                onComplete: () => { busy = false; quietUntil = performance.now() + SETTLE_MS; },
-            });
-        };
-        // true = this gesture belongs to the anchors, so the default scroll is cancelled
-        const claim = (dir: number) => {
-            if (busy || performance.now() < quietUntil) return true;
-            const [top, end] = anchors(), y = window.scrollY;
-            if (y > end + 2) return false; // below the stage: ordinary scrolling
-            if ((dir > 0 && y >= end - 2) || (dir < 0 && y <= top + 2)) return true; // already resting there
-            go(dir);
-            return true;
-        };
-        const onStage = () => window.scrollY <= anchors()[1] + 2;
-
-        const stop = (e: Event) => { e.preventDefault(); e.stopImmediatePropagation(); };
-        const onWheel = (e: WheelEvent) => {
-            if (Math.abs(e.deltaY) < 2 || e.ctrlKey) return;
-            if (claim(Math.sign(e.deltaY))) stop(e);
-        };
-        const onKey = (e: KeyboardEvent) => {
-            const el = e.target as HTMLElement;
-            if (e.altKey || e.ctrlKey || e.metaKey || el.closest("input, textarea, select, [contenteditable]")) return;
-            const dir = DOWN.includes(e.key) ? (e.key === " " && e.shiftKey ? -1 : 1) : UP.includes(e.key) ? -1 : 0;
-            if (dir && claim(dir)) stop(e);
-        };
-        const onTouchStart = (e: TouchEvent) => { touchY = e.touches[0].clientY; };
-        const onTouchMove = (e: TouchEvent) => {
-            if (touchY === null) return;
-            const dy = touchY - e.touches[0].clientY;
-            if (busy || Math.abs(dy) > 24) {
-                if (claim(Math.sign(dy) || 1)) stop(e);
-                touchY = null;
-            } else if (onStage()) stop(e);
-        };
-        const onTouchEnd = () => { touchY = null; };
-        // scrollbar drags can't be intercepted: settle once they stop mid-way
-        const onScroll = () => {
-            clearTimeout(idle);
-            if (busy) return;
-            idle = window.setTimeout(() => {
-                const [top, end] = anchors(), y = window.scrollY;
-                if (busy || y <= top + 2 || y >= end - 2) return;
-                go((y - top) / (end - top) < 0.5 ? -1 : 1);
-            }, 220);
-        };
-
-        const opts = { passive: false, capture: true } as const;
-        window.addEventListener("wheel", onWheel, opts);
-        window.addEventListener("keydown", onKey, opts);
-        window.addEventListener("touchstart", onTouchStart, { passive: true, capture: true });
-        window.addEventListener("touchmove", onTouchMove, opts);
-        window.addEventListener("touchend", onTouchEnd, { capture: true });
-        window.addEventListener("scroll", onScroll, { passive: true });
-        return () => {
-            clearTimeout(idle);
-            window.removeEventListener("wheel", onWheel, opts);
-            window.removeEventListener("keydown", onKey, opts);
-            window.removeEventListener("touchstart", onTouchStart, { capture: true });
-            window.removeEventListener("touchmove", onTouchMove, opts);
-            window.removeEventListener("touchend", onTouchEnd, { capture: true });
-            window.removeEventListener("scroll", onScroll);
-        };
-    }, []);
+    // Anchored scroll: the stage rests at its top (section 1) and its end (section 2), and
+    // every gesture glides between them. Tabbing into the welcome or the nav from section 1
+    // glides there too, so the focused link is never hidden.
+    const ends = () => {
+        const stage = stageRef.current!;
+        return [stage.offsetTop, stage.offsetTop + stage.offsetHeight - window.innerHeight];
+    };
+    useScrollAnchors(() => { const [top, end] = ends(); return [{ y: top, glide: true }, { y: end }]; });
+    const reveal = () => { if (!arrived) glideTo(ends()[1]); };
 
     return (
         <section ref={stageRef} className={s.stage} aria-label="Welcome to S&N Devs">
             {/* eslint-disable-next-line @next/next/no-img-element -- animated SVG, transformed every frame */}
             <img className={s.flyLogo} src="/logo.svg" alt="S&N Devs" />
-            <nav className={s.nav} aria-label="Main">
+            <nav className={s.nav} aria-label="Main" onFocus={reveal}>
                 <ul className={s.navLinks}>
                     {NAV.map((n) => (
                         <li key={n.href} className={s.navItem}>
@@ -276,7 +201,7 @@ export function HomeHero() {
                     </div>
                 </div>
 
-                <div className={s.welcome}>
+                <div className={s.welcome} onFocus={reveal}>
                     <span className={s.kicker}>
                         <DecryptedText key={String(arrived)} text="Welcome in" animateOn="view" sequential characters={GLYPHS} speed={45} />
                     </span>
@@ -302,7 +227,6 @@ export function HomeHero() {
                     <figure className={s.person}><Image src={NOAH} alt="" fill sizes="20vw" /></figure>
                 </div>
 
-                <Noise opacity={0.07} fps={18} contrast={0.5} scanlines={0.05} zIndex={6} />
                 <div className={s.hint}>Scroll</div>
             </div>
         </section>

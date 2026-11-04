@@ -3,63 +3,92 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React, { useState, useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
+import { Menu, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import DecryptedText from "@/components/DecryptedText";
+import { lenisRef } from "@/components/lenis-scroll";
 
+const NAV = [
+    { href: "/", label: "Home" },
+    { href: "/services", label: "Services" },
+    { href: "/about", label: "About" },
+    { href: "/contact", label: "Contact" },
+];
+const GLYPHS = "01<>/{}[]=+*#$";
+
+// The same nav the Home page settles into (logo top-left, links centred, "Get in touch"),
+// shown from the start on every other page.
 export function Navbar() {
     const pathname = usePathname();
-    const [mobileOpen, setMobileOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
+    // Once the page moves, the fade becomes a solid bar so the links stay readable over any section.
     const [scrolled, setScrolled] = useState(false);
-
     useEffect(() => {
-        const handleScroll = () => {
-            setScrolled(window.scrollY > 50);
-        };
-        window.addEventListener("scroll", handleScroll, { passive: true });
-        return () => window.removeEventListener("scroll", handleScroll);
+        const onScroll = () => setScrolled(window.scrollY > 40);
+        onScroll();
+        window.addEventListener("scroll", onScroll, { passive: true });
+        return () => window.removeEventListener("scroll", onScroll);
     }, []);
+
+    // The open menu holds the page still, takes focus, and closes on Escape.
+    const closeRef = useRef<HTMLButtonElement>(null);
+    const openRef = useRef<HTMLButtonElement>(null);
+    useEffect(() => {
+        if (!open) return;
+        lenisRef.current?.stop();
+        closeRef.current?.focus();
+        const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setOpen(false); };
+        window.addEventListener("keydown", onKey);
+        const opener = openRef.current;
+        return () => { lenisRef.current?.start(); window.removeEventListener("keydown", onKey); opener?.focus(); };
+    }, [open]);
 
     // Home builds its own nav: the logo flies up and the links roll out from it.
     if (pathname === "/") return null;
 
     return (
         <>
-            <nav className={`fixed z-50 flex items-center justify-between left-1/2 -translate-x-1/2 transition-all duration-500 p-4 ${scrolled ? "lg:w-5xl w-[calc(100vw-14px)] bg-white/60 backdrop-blur-2xl rounded-full mt-4 pl-6 shadow" : "md:px-16 lg:px-24 xl:px-32 w-full"}`}>
-                <Link href="/" aria-label="S&N Devs home">
-                    <Image width={100} height={100} src="/logo.svg" alt="S&N Devs" className="h-9 w-auto" />
+            <nav aria-label="Main" className={`fixed inset-x-0 top-0 z-50 flex h-[84px] items-center gap-6 px-4 transition-colors duration-500 md:px-7 ${scrolled ? "bg-[#0a0a0a]/85 backdrop-blur-md" : "bg-gradient-to-b from-[#0a0a0a]/75 to-transparent"}`}>
+                <Link href="/" aria-label="S&N Devs home" className="shrink-0">
+                    <Image src="/logo.svg" alt="S&N Devs" width={48} height={48} className="h-12 w-12" priority />
                 </Link>
-
-                {/* Desktop links */}
-                <div className="hidden md:flex items-center gap-6 md:gap-10 text-sm">
-                    <a href="#" className={`transition-colors duration-500 ${scrolled ? "text-zinc-800 hover:text-zinc-600" : "text-white hover:text-white/90"}`}>Home</a>
-                    <a href="#" className={`transition-colors duration-500 ${scrolled ? "text-zinc-800 hover:text-zinc-600" : "text-white hover:text-white/90"}`}>Portfolio</a>
-                    <a href="#" className={`transition-colors duration-500 ${scrolled ? "text-zinc-800 hover:text-zinc-600" : "text-white hover:text-white/90"}`}>Services</a>
-                    <a href="#" className={`transition-colors duration-500 ${scrolled ? "text-zinc-800 hover:text-zinc-600" : "text-white hover:text-white/90"}`}>Contact</a>
-                </div>
-
-                <button className={`hidden md:block px-6 py-2.5 rounded-[6px] text-sm font-medium cursor-pointer transition-all duration-500 ${scrolled ? "bg-zinc-900 text-white hover:bg-zinc-800 rounded-full" : "bg-zinc-50 text-zinc-800 hover:bg-zinc-200"}`}>
-                    Get Started
-                </button>
-
-                <button onClick={() => setMobileOpen(true)} className={`md:hidden p-2 rounded-md aspect-square font-medium transition cursor-pointer ${scrolled ? "text-zinc-800" : "text-white"}`}>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M4 12h16" /><path d="M4 18h16" /><path d="M4 6h16" />
-                    </svg>
+                <ul className="mx-auto hidden gap-9 md:flex">
+                    {NAV.map((n) => {
+                        const active = pathname === n.href;
+                        return (
+                            <li key={n.href}>
+                                <Link href={n.href} aria-current={active ? "page" : undefined} className={`group relative text-sm outline-none transition-colors hover:text-[var(--brand)] focus-visible:text-[var(--brand)] focus-visible:ring-2 focus-visible:ring-[var(--brand)] focus-visible:ring-offset-4 focus-visible:ring-offset-[#0a0a0a] ${active ? "text-[var(--brand)]" : "text-[#dcdcdc]"}`}>
+                                    <DecryptedText text={n.label} animateOn="hover" characters={GLYPHS} speed={40} maxIterations={8} />
+                                    <span className={`absolute inset-x-0 -bottom-1.5 h-px bg-current transition-transform duration-500 ease-[cubic-bezier(.16,1,.3,1)] ${active ? "scale-x-100" : "origin-right scale-x-0 group-hover:origin-left group-hover:scale-x-100"}`} />
+                                </Link>
+                            </li>
+                        );
+                    })}
+                </ul>
+                <Button asChild size="sm" className="ml-auto hidden md:ml-0 md:inline-flex">
+                    <Link href="/contact">Get in touch</Link>
+                </Button>
+                <button ref={openRef} onClick={() => setOpen(true)} aria-label="Open menu" aria-controls="site-menu" aria-expanded={open} className="ml-auto grid size-10 place-items-center text-white md:hidden">
+                    <Menu className="size-6" />
                 </button>
             </nav>
 
-            {/* Mobile Menu Overlay */}
-            <div className={`${mobileOpen ? 'max-md:w-full' : 'max-md:w-0'} md:hidden max-md:fixed max-md:top-0 max-md:z-50 max-md:left-0 max-md:transition-all max-md:duration-300 max-md:overflow-hidden max-md:h-full max-md:bg-white/5 max-md:backdrop-blur max-md:flex-col max-md:justify-center flex items-center gap-6 md:gap-10 text-sm`}>
-                <a href="#" onClick={() => { setMobileOpen(false) }} className={`transition-colors duration-500 ${scrolled ? "text-zinc-800 hover:text-zinc-600" : "text-white hover:text-white/90"}`}>Home</a>
-                <a href="#" onClick={() => { setMobileOpen(false) }} className={`transition-colors duration-500 ${scrolled ? "text-zinc-800 hover:text-zinc-600" : "text-white hover:text-white/90"}`}>Portfolio</a>
-                <a href="#" onClick={() => { setMobileOpen(false) }} className={`transition-colors duration-500 ${scrolled ? "text-zinc-800 hover:text-zinc-600" : "text-white hover:text-white/90"}`}>Services</a>
-                <a href="#" onClick={() => { setMobileOpen(false) }} className={`transition-colors duration-500 ${scrolled ? "text-zinc-800 hover:text-zinc-600" : "text-white hover:text-white/90"}`}>Contact</a>
-
-                <button onClick={() => setMobileOpen(false)} className="md:hidden bg-white text-zinc-800 p-2 rounded-md aspect-square font-medium transition cursor-pointer">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M18 6 6 18" /><path d="m6 6 12 12" />
-                    </svg>
-                </button>
-            </div>
+            {open && (
+                <div id="site-menu" role="dialog" aria-modal="true" aria-label="Menu" className="fixed inset-0 z-[60] flex flex-col items-center justify-center gap-8 bg-[#0a0a0a]/95 backdrop-blur md:hidden">
+                    <button ref={closeRef} onClick={() => setOpen(false)} aria-label="Close menu" className="absolute right-4 top-5 grid size-10 place-items-center text-white">
+                        <X className="size-6" />
+                    </button>
+                    {NAV.map((n) => (
+                        <Link key={n.href} href={n.href} onClick={() => setOpen(false)} aria-current={pathname === n.href ? "page" : undefined} className={`font-heading text-3xl ${pathname === n.href ? "text-[var(--brand)]" : "text-white"}`}>
+                            {n.label}
+                        </Link>
+                    ))}
+                    <Button asChild onClick={() => setOpen(false)}>
+                        <Link href="/contact">Get in touch</Link>
+                    </Button>
+                </div>
+            )}
         </>
     );
 }
