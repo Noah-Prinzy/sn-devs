@@ -18,8 +18,7 @@ const NAV = [
 ];
 const GLYPHS = "01<>/{}[]=+*#$";
 
-// The same nav the Home page settles into (logo top-left, links centred, "Get in touch"),
-// shown from the start on every other page.
+// The site nav (logo top-left, links centred, "Get in touch"), shown on every page.
 export function Navbar() {
     const pathname = usePathname();
     const [open, setOpen] = useState(false);
@@ -44,9 +43,6 @@ export function Navbar() {
         const opener = openRef.current;
         return () => { lenisRef.current?.start(); window.removeEventListener("keydown", onKey); opener?.focus(); };
     }, [open]);
-
-    // Home builds its own nav: the logo flies up and the links roll out from it.
-    if (pathname === "/") return null;
 
     return (
         <>

@@ -4,7 +4,10 @@ import { ArrowLeft, ArrowRight, Check } from "@phosphor-icons/react/dist/ssr";
 import { Badge } from "@/components/ui/badge";
 import { ugx, usd } from "@/data/services";
 import { CATEGORIES, TEMPLATES, TIERS, priceOf } from "@/data/templates";
-import { TemplatePreview } from "@/components/store/template-card";
+import { DeviceStage } from "@/components/store/device-stage";
+import { PriceOdometer } from "@/components/store/price-odometer";
+import { PagesInside, Reveal } from "@/components/store/pages-inside";
+import { shotsOf } from "@/components/store/shots";
 import { BuyPanel } from "@/components/store/buy-panel";
 import { mobileMoneyReady } from "@/lib/store/payments";
 
@@ -26,6 +29,8 @@ export default async function TemplatePage({ params }: { params: Promise<{ slug:
     if (!t) notFound();
     const price = priceOf(t);
     const category = CATEGORIES.find((c) => c.id === t.category)!;
+    const shots = shotsOf(t.slug);
+    const hasMore = Boolean(shots.inner || shots.tall || shots.mobile);
     const tick = <Check className="mt-0.5 size-4 shrink-0 text-[var(--brand)]" />;
 
     return (
@@ -33,15 +38,17 @@ export default async function TemplatePage({ params }: { params: Promise<{ slug:
             <div className="mx-auto max-w-6xl">
                 <Link href="/store" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"><ArrowLeft className="size-4" /> All templates</Link>
 
-                <div className="mt-8 grid gap-12 lg:grid-cols-[1.4fr_1fr]">
-                    <TemplatePreview t={t} large />
+                <div className="mt-8 grid items-start gap-12 lg:grid-cols-[1.4fr_1fr]">
+                    <Reveal>
+                        <DeviceStage slug={t.slug} name={t.name} priority />
+                    </Reveal>
 
-                    <div>
+                    <div className="lg:sticky lg:top-28">
                         <p className="text-xs uppercase tracking-[.25em] text-[var(--brand)]">{category.name} · {TIERS[t.tier]}</p>
                         <h1 className="mt-3 font-heading text-5xl">{t.name}</h1>
                         <p className="mt-4 text-lg text-muted-foreground">{t.tagline}</p>
                         <p className="mt-8 font-heading text-4xl text-[var(--brand)]">
-                            {ugx(price)} <span className="font-sans text-sm text-muted-foreground">{usd(price)}</span>
+                            <PriceOdometer text={ugx(price)} /> <span className="font-sans text-sm text-muted-foreground">{usd(price)}</span>
                         </p>
                         <BuyPanel slug={t.slug} price={ugx(price)} mobileMoney={mobileMoneyReady()} checkoutUrl={t.checkoutUrl} />
                         <p className="mt-3 text-sm text-muted-foreground">One-time payment. Your download starts as soon as the payment goes through.</p>
@@ -49,16 +56,23 @@ export default async function TemplatePage({ params }: { params: Promise<{ slug:
                     </div>
                 </div>
 
+                {hasMore && (
+                    <Reveal className="mt-24">
+                        <h2 className="font-heading text-3xl">Pages inside</h2>
+                        <PagesInside slug={t.slug} name={t.name} />
+                    </Reveal>
+                )}
+
                 <div className="mt-20 grid gap-12 md:grid-cols-3">
-                    <section className="md:col-span-2">
+                    <Reveal className="md:col-span-2"><section>
                         <h2 className="font-heading text-3xl">What it is</h2>
                         <p className="mt-4 text-muted-foreground">{t.description}</p>
                         <h2 className="mt-12 font-heading text-3xl">What&apos;s included</h2>
                         <ul className="mt-4 grid gap-3 sm:grid-cols-2">
                             {[...t.features, "Setup guide", "Full source code"].map((f) => <li key={f} className="flex gap-2 text-foreground">{tick}{f}</li>)}
                         </ul>
-                    </section>
-                    <aside className="space-y-8 text-sm">
+                    </section></Reveal>
+                    <Reveal delay={0.1}><aside className="space-y-8 text-sm">
                         <div>
                             <h2 className="text-xs uppercase tracking-[.2em] text-muted-foreground">Built with</h2>
                             <div className="mt-3 flex flex-wrap gap-2">{t.stack.map((s) => <Badge key={s} variant="outline">{s}</Badge>)}</div>
@@ -75,7 +89,7 @@ export default async function TemplatePage({ params }: { params: Promise<{ slug:
                             <p className="text-foreground">Want it set up and customised for you?</p>
                             <Link href={`/contact?service=templates&template=${t.slug}`} className="mt-2 inline-flex items-center gap-1 text-[var(--brand)] hover:underline">Ask us to set it up <ArrowRight className="size-4" /></Link>
                         </div>
-                    </aside>
+                    </aside></Reveal>
                 </div>
             </div>
         </main>
