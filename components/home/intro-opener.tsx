@@ -10,6 +10,7 @@ import Magnet from "@/components/Magnet";
 import DecryptedText from "@/components/DecryptedText";
 import { useStill } from "@/components/store/browser-frame";
 import { glideTo } from "@/components/use-scroll-anchors";
+import { ScrollHint } from "@/components/scroll-hint";
 
 // Home opener: bright code shows only through a huge S&N. Scrolling flies you through the
 // letters, the code gives way to a laptop in the dark as the welcome rises, then a night desk
@@ -110,7 +111,9 @@ export function IntroOpener({ sectionRef }: { sectionRef: RefObject<HTMLElement 
                 <motion.p aria-hidden style={{ opacity: kicker }} className="pointer-events-none absolute inset-x-0 top-[18vh] text-center text-xs font-semibold uppercase tracking-[.4em] text-[var(--brand)]">
                     <DecryptedText text="Welcome to S&N Devs" animateOn="view" sequential characters={GLYPHS} speed={45} />
                 </motion.p>
-                <motion.p aria-hidden style={{ opacity: hint }} className="pointer-events-none absolute inset-x-0 bottom-8 text-center text-xs uppercase tracking-[.3em] text-neutral-500">Scroll to step through</motion.p>
+                <motion.div aria-hidden style={{ opacity: hint }} className="pointer-events-none absolute inset-x-0 bottom-0 h-0">
+                    <ScrollHint>Scroll to step through</ScrollHint>
+                </motion.div>
 
                 {/* The welcome, then three doors into what we do. */}
                 <div className="absolute inset-0 grid content-end gap-10 px-5 pb-10 md:grid-cols-[1.1fr_1fr] md:content-center md:items-end md:gap-14 md:px-12 md:pb-0 lg:px-20">
