@@ -1,0 +1,13 @@
+/* The "scroll" prompt at the foot of an opening scene: bold, white, on its own dark patch so it
+   reads over any photo, with a green line dripping below it. Shared by Home and About. */
+.hint { position: absolute; z-index: 5; left: 50%; bottom: 14px; transform: translateX(-50%); pointer-events: none;
+  padding: 26px 54px 8px; background: radial-gradient(closest-side, rgb(5 5 5 / .82), rgb(5 5 5 / .55) 60%, transparent);
+  font-family: var(--font-heading), serif; font-size: 15px; font-weight: 800; letter-spacing: .32em; text-indent: .32em;
+  text-transform: uppercase; white-space: nowrap; color: #fff; text-shadow: 0 0 14px rgb(0 0 0 / .9), 0 1px 3px rgb(0 0 0 / .9);
+  display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.hint::after { content: ""; width: 2px; height: 40px; background: linear-gradient(var(--brand), transparent);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--brand) 60%, transparent);
+  transform-origin: top; animation: drip 2.2s cubic-bezier(.65, 0, .35, 1) infinite; }
+@keyframes drip { 0% { transform: scaleY(0); } 50% { transform: scaleY(1); transform-origin: top; } 51% { transform-origin: bottom; } 100% { transform: scaleY(0); transform-origin: bottom; } }
+@media (max-width: 767px) { .hint { font-size: 13px; padding-inline: 40px; } }
+@media (prefers-reduced-motion: reduce) { .hint::after { animation: none; } }
