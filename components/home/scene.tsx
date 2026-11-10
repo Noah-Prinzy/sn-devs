@@ -17,7 +17,7 @@ const SHADES: Record<Shade, string> = {
 };
 
 export function Scene({
-    id, sectionRef, img, pos = "50% 50%", shade = "left", label, className = "", children,
+    id, sectionRef, img, pos = "50% 50%", shade = "left", label, className = "", pinned = false, children,
 }: {
     id?: string;
     sectionRef: RefObject<HTMLElement | null>;
@@ -26,21 +26,28 @@ export function Scene({
     shade?: Shade;
     label: string;
     className?: string;
+    // A scene taller than one screen (the Contact letter) keeps its photo pinned to the viewport
+    // instead of stretching it over the whole section, so the picture stays the size it was shot.
+    pinned?: boolean;
     children: ReactNode;
 }) {
     const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start end", "end start"] });
     // 1.18 while arriving → 1 when it fills the screen → 1.06 as it leaves.
     const scale = useTransform(scrollYProgress, (v) => 1.18 - 0.18 * Math.min(1, v * 2) + 0.12 * Math.max(0, v - 0.5));
     const y = useTransform(scrollYProgress, (v) => `${(v - 0.5) * 8}%`);
+    // overflow-clip, not hidden: clip still crops the zoomed photo but makes no scroll container,
+    // so a sticky child (the Contact page's email sheet) sticks to the viewport.
     return (
-        <section id={id} ref={sectionRef} aria-label={label} className="relative flex min-h-svh overflow-hidden bg-black">
-            <motion.div aria-hidden style={{ scale, y }} className="absolute inset-0 motion-reduce:!transform-none">
-                <Image src={img} alt="" fill sizes="100vw" className="object-cover" style={{ objectPosition: pos }} />
-            </motion.div>
+        <section id={id} ref={sectionRef} aria-label={label} className="relative flex min-h-svh overflow-clip bg-black">
+            <div aria-hidden className="absolute inset-0">
+                <motion.div style={{ scale, y }} className={`${pinned ? "sticky top-0 h-svh" : "absolute inset-0"} overflow-clip motion-reduce:transform-none!`}>
+                    <Image src={img} alt="" fill sizes="100vw" className="object-cover" style={{ objectPosition: pos }} />
+                </motion.div>
+            </div>
             <div aria-hidden className={`absolute inset-0 ${SHADES[shade]}`} />
-            <div aria-hidden className="absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-black/70 to-transparent" />
-            <div aria-hidden className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-black/70 to-transparent" />
-            <div className={`relative z-10 mx-auto flex w-full max-w-7xl flex-col justify-center px-5 pb-12 pt-28 md:px-10 ${className}`}>{children}</div>
+            <div aria-hidden className="absolute inset-x-0 bottom-0 h-1/4 bg-linear-to-t from-black/70 to-transparent" />
+            <div aria-hidden className="absolute inset-x-0 top-0 h-28 bg-linear-to-b from-black/70 to-transparent" />
+            <div className={`relative z-10 mx-auto flex w-full max-w-7xl flex-col justify-center px-5 pb-12 pt-28 md:px-10 short:pb-6 short:pt-24 ${className}`}>{children}</div>
         </section>
     );
 }

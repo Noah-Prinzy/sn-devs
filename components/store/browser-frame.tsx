@@ -19,7 +19,7 @@ export function Screen({ slug, name, play = "hover", sizes, priority }: { slug: 
 
     if (!s.tall) {
         return (
-            <div ref={ref} className="relative aspect-[16/10] overflow-hidden bg-muted">
+            <div ref={ref} className="relative aspect-16/10 overflow-hidden bg-muted">
                 <Image src={s.desktop} alt={alt} fill priority={priority} sizes={sizes}
                     className={`object-cover object-top ${play === "hover" ? "transition-transform duration-700 ease-out group-hover:scale-[1.04]" : ""}`} />
             </div>
@@ -32,7 +32,7 @@ export function Screen({ slug, name, play = "hover", sizes, priority }: { slug: 
     const img = <Image src={s.tall.src} alt={alt} width={1440} height={s.tall.h} priority={priority} sizes={sizes} className="block h-auto w-full" />;
 
     return (
-        <div ref={ref} className="relative aspect-[16/10] overflow-hidden bg-muted">
+        <div ref={ref} className="relative aspect-16/10 overflow-hidden bg-muted">
             {play === "auto" && !reduce ? (
                 <motion.div
                     animate={seen ? { y: ["0%", `${pan}%`, `${pan}%`, "0%"] } : { y: "0%" }}
@@ -43,7 +43,7 @@ export function Screen({ slug, name, play = "hover", sizes, priority }: { slug: 
             ) : (
                 <div
                     style={{ "--pan": `${pan}%`, "--d": `${secs}s` } as CSSProperties}
-                    className={play === "hover" ? "transition-transform duration-700 ease-in-out group-hover:translate-y-[var(--pan)] group-hover:[transition-duration:var(--d)] motion-reduce:!translate-y-0" : ""}
+                    className={play === "hover" ? "transition-transform duration-700 ease-in-out group-hover:translate-y-(--pan) group-hover:duration-(--d) motion-reduce:translate-y-0!" : ""}
                 >
                     {img}
                 </div>

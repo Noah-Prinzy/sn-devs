@@ -154,7 +154,7 @@ function Plinth({ id, art, size }: Inner) {
                     />
                     {/* Reflection: mirrored, blurred, fading out under the horizon. The mask sits on an
                         unflipped wrapper so the fade runs top to bottom. */}
-                    <div aria-hidden className="absolute left-[-4%] top-[76%] h-[72%] w-[108%] [mask-image:linear-gradient(180deg,rgba(0,0,0,.45),transparent_38%)]">
+                    <div aria-hidden className="absolute left-[-4%] top-[76%] h-[72%] w-[108%] mask-[linear-gradient(180deg,rgba(0,0,0,.45),transparent_38%)]">
                         <motion.div className="size-full" animate={reduce ? { y: 0 } : { y: [0, amp, 0] }} transition={loop}>
                             <Image
                                 src={art.src}
@@ -270,7 +270,7 @@ function Scan({ id, art, size }: Inner) {
             {/* Viewfinder corners: quiet framing for the scan. */}
             <div aria-hidden className="pointer-events-none absolute inset-[2%] opacity-50">
                 {["left-0 top-0 border-l border-t", "right-0 top-0 border-r border-t", "left-0 bottom-0 border-l border-b", "right-0 bottom-0 border-r border-b"].map((c) => (
-                    <span key={c} className={cn("absolute size-[10%] border-[var(--brand)]/60", c)} />
+                    <span key={c} className={cn("absolute size-[10%] border-(--brand)/60", c)} />
                 ))}
             </div>
             <motion.div className="absolute inset-0" {...float}>

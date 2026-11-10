@@ -24,7 +24,7 @@ function Ring({ progress, start, size }: { progress: MotionValue<number>; start:
         <span className="absolute left-0 top-0 -translate-x-1/2 -translate-y-1/2" style={{ width: size, height: size }}>
             <motion.span
                 style={{ scale, opacity }}
-                className="absolute inset-0 rounded-full border-2 border-[var(--brand)] shadow-[0_0_24px_rgba(74,222,128,.35),inset_0_0_24px_rgba(74,222,128,.2)]"
+                className="absolute inset-0 rounded-full border-2 border-(--brand) shadow-[0_0_24px_rgba(74,222,128,.35),inset_0_0_24px_rgba(74,222,128,.2)]"
             />
         </span>
     );

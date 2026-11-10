@@ -10,7 +10,7 @@ import { CATEGORIES, TEMPLATES, TIERS, priceOf, type Category } from "@/data/tem
 import { Button } from "@/components/ui/button";
 import DecryptedText from "@/components/DecryptedText";
 import Magnet from "@/components/Magnet";
-import { useScrollAnchors } from "@/components/use-scroll-anchors";
+import { pinStops, sectionStops, useScrollAnchors } from "@/components/use-scroll-anchors";
 import { TemplateCard } from "@/components/store/template-card";
 import { DeviceStage } from "@/components/store/device-stage";
 import { PriceOdometer } from "@/components/store/price-odometer";
@@ -52,7 +52,7 @@ function FloatingWindow({ slug, i, p, still }: { slug: string; i: number; p: Mot
     return (
         <motion.div
             style={{ x, y, scale, opacity, filter, width: `${w.w}vw`, rotate: w.r, zIndex: Math.round(w.z * 10) }}
-            className={`absolute left-1/2 top-1/2 min-w-[150px] ${w.phone ? "" : "hidden md:block"}`}
+            className={`absolute left-1/2 top-1/2 min-w-37.5 ${w.phone ? "" : "hidden md:block"}`}
         >
             <motion.div
                 animate={still ? undefined : { y: [0, -10 * w.z, 0] }}
@@ -60,8 +60,8 @@ function FloatingWindow({ slug, i, p, still }: { slug: string; i: number; p: Mot
                 className="-translate-x-1/2 -translate-y-1/2 overflow-hidden border border-white/10 bg-[#111] shadow-[0_30px_60px_-20px_rgba(0,0,0,.9)]"
             >
                 <div className="flex gap-1 border-b border-white/10 px-2 py-1.5">{[0, 1, 2].map((k) => <span key={k} className="size-1.5 bg-white/20" />)}</div>
-                <div className="relative aspect-[16/10]">
-                    <Image src={`/assets/store/${slug}/desktop.png`} alt="" fill sizes="(min-width: 768px) 18vw, 30vw" priority={i < 6} loading={i < 6 ? undefined : "eager"} className="object-cover object-top" />
+                <div className="relative aspect-16/10">
+                    <Image src={`/assets/store/${slug}/desktop.png`} alt="" fill sizes="(min-width: 768px) 18vw, 30vw" priority={i < 2} className="object-cover object-top" />
                 </div>
             </motion.div>
         </motion.div>
@@ -83,7 +83,7 @@ function PayPhone() {
     }, [seen, reduce]);
     const screens = [
         <div key="pin" className="flex h-full flex-col justify-center gap-3 p-4 text-center">
-            <DeviceMobile className="mx-auto size-7 text-[var(--brand)]" />
+            <DeviceMobile className="mx-auto size-7 text-(--brand)" />
             <p className="text-[11px] uppercase tracking-[.2em] text-neutral-400">Mobile Money</p>
             <p className="font-heading text-lg leading-tight">Approve<br />UGX 180K?</p>
             <div className="mx-auto flex gap-1.5">{[0, 1, 2, 3].map((k) => (
@@ -92,7 +92,7 @@ function PayPhone() {
         </div>,
         <div key="ok" className="grid h-full place-items-center p-4 text-center">
             <div>
-                <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: "spring", stiffness: 260, damping: 14 }} className="mx-auto grid size-14 place-items-center rounded-full bg-[var(--brand)] text-[var(--brand-fg)]">
+                <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: "spring", stiffness: 260, damping: 14 }} className="mx-auto grid size-14 place-items-center rounded-full bg-(--brand) text-(--brand-fg)">
                     <Check weight="bold" className="size-7" />
                 </motion.div>
                 <p className="mt-3 font-heading text-lg">Paid</p>
@@ -104,19 +104,19 @@ function PayPhone() {
                 <div className="relative mx-auto h-16 w-20">
                     <div className="absolute inset-x-0 bottom-0 h-11 border border-white/20 bg-white/5" />
                     <motion.div initial={{ y: -40, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ type: "spring", stiffness: 200, damping: 16 }} className="absolute left-1/2 top-0 -ml-4">
-                        <FileZip className="size-8 text-[var(--brand)]" />
+                        <FileZip className="size-8 text-(--brand)" />
                     </motion.div>
                 </div>
                 <p className="mt-3 font-heading text-lg">Downloading</p>
                 <div className="mx-auto mt-2 h-1 w-24 overflow-hidden bg-white/10">
-                    <motion.div initial={{ width: "0%" }} animate={{ width: "100%" }} transition={{ duration: 1.8, ease: "easeInOut" }} className="h-full bg-[var(--brand)]" />
+                    <motion.div initial={{ width: "0%" }} animate={{ width: "100%" }} transition={{ duration: 1.8, ease: "easeInOut" }} className="h-full bg-(--brand)" />
                 </div>
             </div>
         </div>,
     ];
     return (
-        <div ref={ref} className="mx-auto w-[190px] rounded-[30px] border border-white/15 bg-[#151515] p-2 shadow-[0_40px_80px_-30px_rgba(0,0,0,.9)]">
-            <div className="relative aspect-[9/17] overflow-hidden rounded-[24px] bg-[#0a0a0a]">
+        <div ref={ref} className="mx-auto w-47.5 rounded-[30px] border border-white/15 bg-[#151515] p-2 shadow-[0_40px_80px_-30px_rgba(0,0,0,.9)]">
+            <div className="relative aspect-9/17 overflow-hidden rounded-[24px] bg-[#0a0a0a]">
                 <div className="absolute left-1/2 top-2 z-10 h-1.5 w-12 -translate-x-1/2 rounded-full bg-white/10" />
                 <AnimatePresence mode="wait">
                     <motion.div key={step} initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -14 }} transition={{ duration: 0.35 }} className="absolute inset-0">
@@ -138,12 +138,17 @@ const STEPS = [
 export function StorePage() {
     const reduce = useStill();
     const hero = useRef<HTMLElement>(null);
+    const catalogue = useRef<HTMLElement>(null);
+    const featured = useRef<HTMLElement>(null);
+    const how = useRef<HTMLElement>(null);
     const { scrollYProgress } = useScroll({ target: hero, offset: ["start start", "end end"] });
     const word = useTransform(scrollYProgress, (v) => 0.82 + 0.18 * span(v, 0, 1));
     const lede = useTransform(scrollYProgress, (v) => span(v, 0.6, 0.9));
     const veil = useTransform(scrollYProgress, (v) => 0.35 + 0.5 * span(v, 0.6, 0.95));
 
-    useScrollAnchors();
+    // Anchors: the wall of screens (start and end), the catalogue top (the grid scrolls free),
+    // the featured edition and how buying works, one screen each.
+    useScrollAnchors(() => [...pinStops(hero.current, [0, 1]), ...sectionStops([catalogue, featured, how])]);
 
     const [cat, setCat] = useState<Category | "all">("all");
     const shown = cat === "all" ? TEMPLATES : TEMPLATES.filter((t) => t.category === cat);
@@ -170,26 +175,26 @@ export function StorePage() {
                         </div>
                         <motion.div aria-hidden style={{ opacity: veil }} className="pointer-events-none absolute inset-0 z-20 bg-[radial-gradient(ellipse_at_center,rgba(10,10,10,.9)_0%,rgba(10,10,10,.55)_35%,transparent_70%)]" />
                         <div className="relative z-30 flex flex-col items-center px-4">
-                            <p className="text-xs font-semibold uppercase tracking-[.3em] text-[var(--brand)]">
+                            <p className="text-xs font-semibold uppercase tracking-[.3em] text-(--brand)">
                                 <DecryptedText text={`${TEMPLATES.length} S&N Editions · ${CATEGORIES.length} categories`} animateOn="view" sequential characters={GLYPHS} speed={40} />
                             </p>
                             <motion.h1
                                 id="store-title"
                                 style={{ scale: word }}
-                                className="mt-2 bg-[linear-gradient(180deg,#ffffff_0%,#cfcfcf_100%)] bg-clip-text font-heading text-[24vw] font-extrabold leading-none tracking-tight text-transparent drop-shadow-[0_20px_30px_rgba(0,0,0,.6)] md:text-[21vw]"
+                                className="mt-2 bg-[linear-gradient(180deg,#ffffff_0%,#cfcfcf_100%)] bg-clip-text font-heading text-[min(24vw,30vh)] font-extrabold leading-none tracking-tight text-transparent drop-shadow-[0_20px_30px_rgba(0,0,0,.6)] md:text-[min(21vw,30vh)]"
                             >
                                 STORE
                             </motion.h1>
                         </div>
-                        <motion.div style={{ opacity: reduce ? 1 : lede }} className="absolute bottom-[10vh] z-30 bg-[radial-gradient(ellipse_at_center,rgba(10,10,10,.92)_35%,transparent_72%)] px-10 py-8 text-center">
-                            <p className="font-heading text-3xl md:text-5xl">Ready-made. Restyled. <span className="italic text-[var(--brand)]">Yours today.</span></p>
-                            <p className="mt-3 text-neutral-400">Websites, dashboards, apps and systems. Buy once, download straight away.</p>
+                        <motion.div style={{ opacity: reduce ? 1 : lede }} className="needs-js absolute bottom-[10vh] z-30 bg-[radial-gradient(ellipse_at_center,rgba(10,10,10,.92)_35%,transparent_72%)] px-10 py-8 text-center short:bottom-[2vh] short:py-3">
+                            <p className="font-heading text-3xl md:text-5xl short:text-xl">Ready-made. Restyled. <span className="italic text-(--brand)">Yours today.</span></p>
+                            <p className="mt-3 text-neutral-400 short:mt-1 short:text-sm">Websites, dashboards, apps and systems. Buy once, download straight away.</p>
                         </motion.div>
                     </div>
                 </section>
 
                 {/* 2 · The catalogue */}
-                <section className="mx-auto max-w-7xl px-4 py-24 md:px-6" aria-labelledby="catalogue-title">
+                <section ref={catalogue} className="mx-auto max-w-7xl px-4 py-24 md:px-6" aria-labelledby="catalogue-title">
                     <div className="flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
                         <div>
                             <p className="text-xs uppercase tracking-[.3em] text-neutral-400">The catalogue</p>
@@ -203,11 +208,11 @@ export function StorePage() {
                                     role="tab"
                                     aria-selected={cat === r.id}
                                     onClick={() => setCat(r.id)}
-                                    className={`flex items-baseline gap-2 py-1 text-left font-heading text-xl outline-none transition-colors focus-visible:ring-2 focus-visible:ring-[var(--brand)] ${cat === r.id ? "text-white" : "text-neutral-500 hover:text-neutral-200"}`}
+                                    className={`flex items-baseline gap-2 py-1 text-left font-heading text-xl outline-none transition-colors focus-visible:ring-2 focus-visible:ring-(--brand) ${cat === r.id ? "text-white" : "text-neutral-500 hover:text-neutral-200"}`}
                                 >
-                                    <span className={`size-2 shrink-0 -translate-y-0.5 rounded-full transition-all ${cat === r.id ? "bg-[var(--brand)] shadow-[0_0_12px_var(--brand)]" : "bg-white/10"}`} />
+                                    <span className={`size-2 shrink-0 -translate-y-0.5 rounded-full transition-all ${cat === r.id ? "bg-(--brand) shadow-[0_0_12px_var(--brand)]" : "bg-white/10"}`} />
                                     <DecryptedText text={r.name} animateOn="hover" characters={GLYPHS} speed={40} maxIterations={8} />
-                                    <sup className={`font-sans text-[11px] tabular-nums ${cat === r.id ? "text-[var(--brand)]" : ""}`}>{r.count}</sup>
+                                    <sup className={`font-sans text-[11px] tabular-nums ${cat === r.id ? "text-(--brand)" : ""}`}>{r.count}</sup>
                                 </button>
                             ))}
                         </div>
@@ -241,9 +246,10 @@ export function StorePage() {
 
                 {/* 3 · Featured edition */}
                 <section
+                    ref={featured}
                     onPointerEnter={() => setHeld(true)}
                     onPointerLeave={() => setHeld(false)}
-                    className="relative flex min-h-svh items-center overflow-hidden bg-[var(--brand)] px-4 py-24 text-[var(--brand-fg)] md:px-6"
+                    className="relative flex min-h-svh items-center overflow-hidden bg-(--brand) px-4 py-24 text-(--brand-fg) md:px-6"
                     aria-labelledby="featured-title"
                 >
                     <div className="mx-auto grid w-full max-w-7xl items-center gap-14 lg:grid-cols-[0.8fr_1.2fr]">
@@ -268,12 +274,15 @@ export function StorePage() {
                             </div>
                             <div className="mt-10 flex gap-2" role="tablist" aria-label="Premium editions">
                                 {FEATURED.map((x, i) => (
+                                    // The bar is 6 px tall; the button around it is the 24 px target (WCAG 2.5.8).
                                     <button key={x.slug} role="tab" aria-selected={i === fi} aria-label={x.name} onClick={() => setFi(i)}
-                                        className={`h-1.5 transition-all ${i === fi ? "w-10 bg-[#0a0a0a]" : "w-4 bg-[#0a0a0a]/25 hover:bg-[#0a0a0a]/50"}`} />
+                                        className="group/tab flex h-6 min-w-6 items-center outline-none focus-visible:ring-2 focus-visible:ring-[#0a0a0a] focus-visible:ring-offset-2 focus-visible:ring-offset-(--brand)">
+                                        <span className={`h-1.5 transition-all ${i === fi ? "w-10 bg-[#0a0a0a]" : "w-4 bg-[#0a0a0a]/25 group-hover/tab:bg-[#0a0a0a]/50"}`} />
+                                    </button>
                                 ))}
                             </div>
                         </div>
-                        <div className="relative [perspective:1600px]">
+                        <div className="relative perspective-[1600px]">
                             <AnimatePresence mode="popLayout" initial={false}>
                                 <motion.div
                                     key={f.slug}
@@ -290,7 +299,7 @@ export function StorePage() {
                 </section>
 
                 {/* 4 · How buying works */}
-                <section className="mx-auto flex min-h-svh max-w-7xl flex-col justify-center px-4 py-24 md:px-6" aria-labelledby="how-title">
+                <section ref={how} className="mx-auto flex min-h-svh max-w-7xl flex-col justify-center px-4 py-24 md:px-6" aria-labelledby="how-title">
                     <p className="text-xs uppercase tracking-[.3em] text-neutral-400">How buying works</p>
                     <h2 id="how-title" className="mt-3 max-w-xl font-heading text-5xl md:text-6xl">Three steps. About a minute.</h2>
                     <div className="mt-16 grid items-center gap-16 lg:grid-cols-[1.4fr_1fr]">
@@ -302,8 +311,8 @@ export function StorePage() {
                             {STEPS.map((s, i) => (
                                 <motion.li key={s.title} initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-15% 0px" }} transition={{ delay: 0.2 + i * 0.35 }} className="relative">
                                     <div className="relative grid size-14 place-items-center border border-white/15 bg-[#0a0a0a]">
-                                        <s.icon className="size-6 text-[var(--brand)]" />
-                                        <span className="absolute -right-2 -top-2 grid size-5 place-items-center bg-[var(--brand)] text-[11px] font-semibold text-[var(--brand-fg)]">{i + 1}</span>
+                                        <s.icon className="size-6 text-(--brand)" />
+                                        <span className="absolute -right-2 -top-2 grid size-5 place-items-center bg-(--brand) text-[11px] font-semibold text-(--brand-fg)">{i + 1}</span>
                                     </div>
                                     <h3 className="mt-5 font-heading text-3xl">{s.title}</h3>
                                     <p className="mt-2 text-sm text-neutral-400">{s.body}</p>

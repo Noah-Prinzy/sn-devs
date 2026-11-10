@@ -17,7 +17,7 @@ export function DeviceStage({ slug, name, priority, className = "" }: { slug: st
                         <Screen slug={slug} name={name} play="auto" sizes="(min-width: 1024px) 720px, 92vw" priority={priority} />
                     </div>
                 </div>
-                <div className="relative mx-[-6%] h-3 rounded-b-[10px] bg-gradient-to-b from-[#2a2a2a] to-[#121212] md:h-4">
+                <div className="relative mx-[-6%] h-3 rounded-b-[10px] bg-linear-to-b from-[#2a2a2a] to-[#121212] md:h-4">
                     <div className="absolute left-1/2 top-0 h-1.5 w-[14%] -translate-x-1/2 rounded-b-md bg-black/60" />
                 </div>
             </div>
@@ -27,7 +27,7 @@ export function DeviceStage({ slug, name, priority, className = "" }: { slug: st
                     transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
                     className="absolute bottom-0 right-0 w-[24%] rounded-[18%/8.5%] border border-white/15 bg-[#151515] p-[1.6%] shadow-[0_30px_60px_-20px_rgba(0,0,0,.9)]"
                 >
-                    <div className="relative aspect-[375/812] overflow-hidden rounded-[15%/7%] bg-muted">
+                    <div className="relative aspect-375/812 overflow-hidden rounded-[15%/7%] bg-muted">
                         <Image src={mobile} alt={`${name} on a phone`} fill sizes="180px" className="object-cover object-top" />
                     </div>
                 </motion.div>

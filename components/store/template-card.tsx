@@ -51,7 +51,7 @@ export function TemplateCard({ t, index = 0 }: { t: Template; index?: number }) 
                 href={`/store/${t.slug}`}
                 onPointerMove={move}
                 onPointerLeave={leave}
-                className="group relative flex h-full flex-col border border-border bg-[#0d0d0d] p-3 outline-none transition-colors hover:border-transparent focus-visible:ring-2 focus-visible:ring-[var(--brand)]"
+                className="group relative flex h-full flex-col border border-border bg-[#0d0d0d] p-3 outline-none transition-colors hover:border-transparent focus-visible:ring-2 focus-visible:ring-(--brand)"
             >
                 {/* The edge light: a radial glow masked to the 1px border. */}
                 <span
@@ -70,10 +70,10 @@ export function TemplateCard({ t, index = 0 }: { t: Template; index?: number }) 
 
                 <div className="relative flex flex-1 flex-col px-2 pb-2 pt-5">
                     <p className="text-[11px] uppercase tracking-[.25em] text-muted-foreground">{TIERS[t.tier]}</p>
-                    <h3 className="mt-2 font-heading text-2xl transition-colors group-hover:text-[var(--brand)]">{t.name}</h3>
+                    <h3 className="mt-2 font-heading text-2xl transition-colors group-hover:text-(--brand)">{t.name}</h3>
                     <p className="mt-2 text-sm text-muted-foreground">{t.tagline}</p>
                     <div className="mt-auto flex items-end justify-between pt-6">
-                        <p className="font-heading text-xl text-[var(--brand)]">
+                        <p className="font-heading text-xl text-(--brand)">
                             <PriceOdometer text={ugx(price)} delay={(index % 3) * 0.08} />
                             <span className="ml-2 font-sans text-xs text-muted-foreground">{usd(price)}</span>
                         </p>

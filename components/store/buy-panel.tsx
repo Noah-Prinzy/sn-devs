@@ -13,7 +13,7 @@ type Stage =
 
 const POLL_MS = 3000;
 const GIVE_UP_MS = 4 * 60 * 1000;
-const field = "mt-2 h-11 w-full border border-input bg-transparent px-3 text-sm normal-case tracking-normal text-foreground outline-none placeholder:text-muted-foreground focus-visible:border-[var(--brand)]";
+const field = "mt-2 h-11 w-full border border-input bg-transparent px-3 text-sm normal-case tracking-normal text-foreground outline-none placeholder:text-muted-foreground focus-visible:border-(--brand)";
 const label = "block text-xs uppercase tracking-[.2em] text-muted-foreground";
 
 // Buy: Mobile Money (Nylon Pay, UGX) or card (Lemon Squeezy). After a mobile money
@@ -138,7 +138,7 @@ export function BuyPanel({ slug, price, mobileMoney, checkoutUrl }: { slug: stri
 
             {stage.kind === "waiting" && (
                 <div className="space-y-3 border border-border p-5">
-                    <p className="flex items-center gap-2 text-foreground"><SpinnerGap className="size-5 animate-spin text-[var(--brand)]" /> Check your phone and enter your PIN.</p>
+                    <p className="flex items-center gap-2 text-foreground"><SpinnerGap className="size-5 animate-spin text-(--brand)" /> Check your phone and enter your PIN.</p>
                     <p className="text-sm text-muted-foreground">
                         {stage.slow
                             ? "Still waiting for the payment to come through. If you approved it, check again in a moment."
@@ -152,7 +152,7 @@ export function BuyPanel({ slug, price, mobileMoney, checkoutUrl }: { slug: stri
             )}
 
             {stage.kind === "paid" && (
-                <div className="space-y-3 border border-[var(--brand)] p-5">
+                <div className="space-y-3 border border-(--brand) p-5">
                     <p className="text-foreground">Payment received. Thank you! Your download has started.</p>
                     <Button asChild size="lg" className="w-full"><a href={stage.downloadUrl}><DownloadSimple /> Download again</a></Button>
                     <p className="text-xs text-muted-foreground">This link works for 24 hours.</p>

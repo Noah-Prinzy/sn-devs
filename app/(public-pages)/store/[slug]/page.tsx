@@ -31,12 +31,12 @@ export default async function TemplatePage({ params }: { params: Promise<{ slug:
     const category = CATEGORIES.find((c) => c.id === t.category)!;
     const shots = shotsOf(t.slug);
     const hasMore = Boolean(shots.inner || shots.tall || shots.mobile);
-    const tick = <Check className="mt-0.5 size-4 shrink-0 text-[var(--brand)]" />;
+    const tick = <Check className="mt-0.5 size-4 shrink-0 text-(--brand)" />;
 
     return (
         <main className="min-h-svh bg-background px-4 pb-28 pt-32 text-foreground md:px-6">
             <div className="mx-auto max-w-6xl">
-                <Link href="/store" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"><ArrowLeft className="size-4" /> All templates</Link>
+                <Link href="/store" className="inline-flex items-center gap-2 py-2 text-sm text-muted-foreground hover:text-foreground"><ArrowLeft className="size-4" /> All templates</Link>
 
                 <div className="mt-8 grid items-start gap-12 lg:grid-cols-[1.4fr_1fr]">
                     <Reveal>
@@ -44,10 +44,10 @@ export default async function TemplatePage({ params }: { params: Promise<{ slug:
                     </Reveal>
 
                     <div className="lg:sticky lg:top-28">
-                        <p className="text-xs uppercase tracking-[.25em] text-[var(--brand)]">{category.name} · {TIERS[t.tier]}</p>
+                        <p className="text-xs uppercase tracking-[.25em] text-(--brand)">{category.name} · {TIERS[t.tier]}</p>
                         <h1 className="mt-3 font-heading text-5xl">{t.name}</h1>
                         <p className="mt-4 text-lg text-muted-foreground">{t.tagline}</p>
-                        <p className="mt-8 font-heading text-4xl text-[var(--brand)]">
+                        <p className="mt-8 font-heading text-4xl text-(--brand)">
                             <PriceOdometer text={ugx(price)} /> <span className="font-sans text-sm text-muted-foreground">{usd(price)}</span>
                         </p>
                         <BuyPanel slug={t.slug} price={ugx(price)} mobileMoney={mobileMoneyReady()} checkoutUrl={t.checkoutUrl} />
@@ -87,7 +87,7 @@ export default async function TemplatePage({ params }: { params: Promise<{ slug:
                         </div>
                         <div className="border border-border p-5">
                             <p className="text-foreground">Want it set up and customised for you?</p>
-                            <Link href={`/contact?service=templates&template=${t.slug}`} className="mt-2 inline-flex items-center gap-1 text-[var(--brand)] hover:underline">Ask us to set it up <ArrowRight className="size-4" /></Link>
+                            <Link href={`/contact?service=templates&template=${t.slug}`} className="mt-2 inline-flex items-center gap-1 py-2 text-(--brand) hover:underline">Ask us to set it up <ArrowRight className="size-4" /></Link>
                         </div>
                     </aside></Reveal>
                 </div>

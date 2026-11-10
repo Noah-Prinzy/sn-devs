@@ -40,8 +40,8 @@ export function PagesInside({ slug, name }: { slug: string; name: string }) {
             <div className="mt-6 flex gap-5 overflow-x-auto pb-2">
                 {shots.map((x, i) => (
                     <Reveal key={x.src} delay={i * 0.1} className="shrink-0">
-                        <button onClick={() => setOpen(x)} className="group block text-left outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand)]">
-                            <div className={`relative overflow-hidden border border-border bg-muted transition-colors group-hover:border-[var(--brand)] ${x.phone ? "aspect-[375/812] h-64" : "aspect-[16/10] h-64"}`}>
+                        <button onClick={() => setOpen(x)} className="group block text-left outline-none focus-visible:ring-2 focus-visible:ring-(--brand)">
+                            <div className={`relative overflow-hidden border border-border bg-muted transition-colors group-hover:border-(--brand) ${x.phone ? "aspect-375/812 h-64" : "aspect-16/10 h-64"}`}>
                                 <Image src={x.src} alt={`${name}: ${x.label}`} fill sizes="420px" className="object-cover object-top transition-transform duration-700 group-hover:scale-[1.03]" />
                             </div>
                             <p className="mt-2 text-sm text-muted-foreground group-hover:text-foreground">{x.label}</p>
@@ -52,7 +52,7 @@ export function PagesInside({ slug, name }: { slug: string; name: string }) {
             <AnimatePresence>
                 {open && (
                     <motion.div role="dialog" aria-modal aria-label={open.label} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setOpen(null)}
-                        className="fixed inset-0 z-[100] overflow-y-auto bg-black/90 p-4 md:p-10" data-lenis-prevent>
+                        className="fixed inset-0 z-100 overflow-y-auto bg-black/90 p-4 md:p-10" data-lenis-prevent>
                         <button aria-label="Close" onClick={() => setOpen(null)} className="fixed right-4 top-4 z-10 grid size-10 place-items-center bg-white/10 text-white hover:bg-white/20"><X className="size-5" /></button>
                         <motion.div initial={{ y: 30, scale: 0.97 }} animate={{ y: 0, scale: 1 }} className={`mx-auto ${open.phone ? "max-w-sm" : "max-w-5xl"}`} onClick={(e) => e.stopPropagation()}>
                             <Image src={open.src} alt={`${name}: ${open.label}`} width={open.w} height={open.h} sizes="(min-width: 1024px) 1024px, 100vw" className="h-auto w-full border border-white/10" />
