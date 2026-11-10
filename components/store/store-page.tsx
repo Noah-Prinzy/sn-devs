@@ -3,7 +3,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { AnimatePresence, MotionConfig, motion, useInView, useScroll, useTransform, type MotionValue } from "motion/react";
+import { AnimatePresence, motion, useInView, useScroll, useTransform, type MotionValue } from "motion/react";
+import { SiteMotion } from "@/components/site-motion";
 import { ArrowRight, Check, DeviceMobile, DownloadSimple, FileZip, SquaresFour } from "@phosphor-icons/react";
 import { ugx, usd } from "@/data/services";
 import { CATEGORIES, TEMPLATES, TIERS, priceOf, type Category } from "@/data/templates";
@@ -165,7 +166,7 @@ export function StorePage() {
     const f = FEATURED[fi];
 
     return (
-        <MotionConfig reducedMotion="user">
+        <SiteMotion>
             <main className="overflow-x-clip bg-[#0a0a0a] text-neutral-100">
                 {/* 1 · The wall of screens */}
                 <section ref={hero} className="relative h-[220svh] motion-reduce:h-svh" aria-labelledby="store-title">
@@ -199,7 +200,7 @@ export function StorePage() {
                         <div>
                             <p className="text-xs uppercase tracking-[.3em] text-neutral-400">The catalogue</p>
                             <h2 id="catalogue-title" className="mt-3 max-w-xl font-heading text-5xl md:text-6xl">Templates, ready to ship.</h2>
-                            <p className="mt-4 max-w-lg text-neutral-400">Restyled, tested and documented by our team. Hover a card to scroll through its page.</p>
+                            <p className="mt-4 max-w-lg text-neutral-400">Restyled, tested and documented by our team. Hover or open a card to scroll through its page.</p>
                         </div>
                         <div role="tablist" aria-label="Categories" className="flex flex-wrap gap-x-6 gap-y-3 lg:max-w-xl lg:justify-end">
                             {rail.map((r) => (
@@ -323,6 +324,6 @@ export function StorePage() {
                     </div>
                 </section>
             </main>
-        </MotionConfig>
+        </SiteMotion>
     );
 }

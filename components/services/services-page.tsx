@@ -3,7 +3,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { AnimatePresence, MotionConfig, motion, useReducedMotion, useScroll, useTransform } from "motion/react";
+import { AnimatePresence, motion, useReducedMotion, useScroll, useTransform } from "motion/react";
+import { SiteMotion } from "@/components/site-motion";
 import { Check, ArrowRight } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 import { SERVICE_GROUPS, WEBSITE_TIERS, ugx, usd } from "@/data/services";
@@ -44,7 +45,8 @@ export function ServicesPage() {
     // frame on the main thread (Chrome scrollytelling guide: compositor properties only).
     const horizonScale = useTransform(scrollYProgress, (v) => 1.08 - 0.08 * span(v, 0.5, 0.85));
     const word = useTransform(scrollYProgress, (v) => 0.8 + 0.18 * span(v, 0, 1));
-    const lede = useTransform(scrollYProgress, (v) => span(v, 0.55, 0.9));
+    // What we sell is readable on the fold: the lede arrives in the first third of the pin.
+    const lede = useTransform(scrollYProgress, (v) => span(v, 0.1, 0.35));
     const reduce = useReducedMotion();
 
     // Anchors: the opener pin (start and end), the switchboard top (the list itself scrolls free)
@@ -64,7 +66,7 @@ export function ServicesPage() {
     const art = ART[svc.id];
 
     return (
-        <MotionConfig reducedMotion="user">
+        <SiteMotion>
             <main className="overflow-x-clip bg-[#0a0a0a] text-neutral-100">
                 <section ref={hero} className="relative h-[220svh] motion-reduce:h-svh" aria-labelledby="services-title">
                     <div className="sticky top-0 grid h-svh place-items-center overflow-hidden">
@@ -178,6 +180,6 @@ export function ServicesPage() {
                     </div>
                 </section>
             </main>
-        </MotionConfig>
+        </SiteMotion>
     );
 }

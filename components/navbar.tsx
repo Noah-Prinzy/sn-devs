@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import DecryptedText from "@/components/DecryptedText";
 import { lenisRef } from "@/components/lenis-scroll";
 import { ScrollProgress } from "@/components/scroll-progress";
+import { MotionToggle } from "@/components/motion-toggle";
 
 const NAV = [
     { href: "/", label: "Home" },
@@ -75,10 +76,11 @@ export function Navbar() {
                         );
                     })}
                 </ul>
-                <Button asChild size="sm" className="ml-auto hidden md:ml-0 md:inline-flex">
+                <MotionToggle className="ml-auto md:ml-0" />
+                <Button asChild size="sm" className="hidden md:inline-flex">
                     <Link href="/contact">Get in touch</Link>
                 </Button>
-                <button ref={openRef} onClick={() => setOpen(true)} aria-label="Open menu" aria-controls="site-menu" aria-expanded={open} className="ml-auto grid size-11 place-items-center text-white outline-none focus-visible:ring-2 focus-visible:ring-(--brand) focus-visible:ring-offset-2 focus-visible:ring-offset-[#0a0a0a] md:hidden">
+                <button ref={openRef} onClick={() => setOpen(true)} aria-label="Open menu" aria-controls="site-menu" aria-expanded={open} className="grid size-11 place-items-center text-white outline-none focus-visible:ring-2 focus-visible:ring-(--brand) focus-visible:ring-offset-2 focus-visible:ring-offset-[#0a0a0a] md:hidden">
                     <List className="size-6" />
                 </button>
                 {scrolled && <ScrollProgress />}

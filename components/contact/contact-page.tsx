@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
-import { MotionConfig, motion, useScroll, useTransform, type MotionValue, type Variants } from "motion/react";
+import { motion, useScroll, useTransform, type MotionValue, type Variants } from "motion/react";
+import { SiteMotion } from "@/components/site-motion";
 import { ArrowUpRight, EnvelopeSimple, Plus, WhatsappLogo } from "@phosphor-icons/react";
 import Link from "next/link";
 import Image from "next/image";
@@ -112,7 +113,7 @@ export function ContactPage() {
     useScrollAnchors(() => [...pinStops(hero.current, [0, 1]), ...sectionStops([channel, next, faq, ready])]);
 
     return (
-        <MotionConfig reducedMotion="user">
+        <SiteMotion>
             <main className="overflow-x-clip bg-[#0a0a0a] text-neutral-100 selection:bg-(--brand) selection:text-(--brand-fg)">
                 {/* 1 — Opener: the reach. The network behind, Kampala pinned, the word on air. */}
                 <section ref={hero} className="relative h-[220svh]" aria-labelledby="contact-title">
@@ -320,7 +321,7 @@ export function ContactPage() {
                     </div>
                 </section>
             </main>
-        </MotionConfig>
+        </SiteMotion>
     );
 }
 

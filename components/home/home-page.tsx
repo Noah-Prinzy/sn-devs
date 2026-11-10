@@ -3,7 +3,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRef } from "react";
-import { MotionConfig, motion, useInView, useScroll, useTransform } from "motion/react";
+import { motion, useInView, useScroll, useTransform } from "motion/react";
+import { SiteMotion } from "@/components/site-motion";
 import { ArrowRight } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 import Magnet from "@/components/Magnet";
@@ -56,7 +57,7 @@ export function HomePage() {
     const draw = useTransform(howP, (v) => (still ? 1 : v));
 
     return (
-        <MotionConfig reducedMotion="user">
+        <SiteMotion>
             <main className="overflow-x-clip bg-black text-neutral-100">
                 {/* 1 · Through the letters */}
                 <IntroOpener sectionRef={opener} />
@@ -107,6 +108,6 @@ export function HomePage() {
                     </div>
                 </Scene>
             </main>
-        </MotionConfig>
+        </SiteMotion>
     );
 }

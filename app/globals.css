@@ -262,6 +262,13 @@ h1, h2, h3, h4, h5, h6 {
 /* Copy that scroll progress reveals (the Home welcome, the Services and Store ledes) starts
    hidden in the static HTML; without JavaScript it must simply be there (CSSWG: forcing
    reduced motion on scroll-linked animations "will sometimes make content invisible"). */
+/* The site's pause-motion switch (components/motion-pref.tsx): CSS loops stop where they are. */
+html[data-motion="paused"] *,
+html[data-motion="paused"] *::before,
+html[data-motion="paused"] *::after {
+  animation-play-state: paused !important;
+}
+
 @media (scripting: none) {
   /* ...and any reveal that Motion renders hidden in the static HTML (initial opacity 0 for
      whileInView / animate) shows at rest, since the script that would reveal it never runs. */

@@ -3,7 +3,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { MotionConfig, motion } from "motion/react";
+import { motion } from "motion/react";
+import { SiteMotion } from "@/components/site-motion";
 import { ArrowDown, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SERVICE_GROUPS, ugx } from "@/data/services";
@@ -62,7 +63,7 @@ function Reveal({ children, delay = 0, className }: { children: ReactNode; delay
 
 export function AboutPage() {
     return (
-        <MotionConfig reducedMotion="user">
+        <SiteMotion>
             <main className="overflow-x-clip bg-[#0a0a0a] text-neutral-100">
                 <PortalIntro targetId="about" />
 
@@ -172,6 +173,6 @@ export function AboutPage() {
                     </Reveal>
                 </section>
             </main>
-        </MotionConfig>
+        </SiteMotion>
     );
 }

@@ -8,6 +8,8 @@ const nextConfig: NextConfig = {
     root: path.join(__dirname),
   },
   images: {
+    // Next 16 only serves the qualities listed here; the pages ask for 70 (ghosted map), 75 (default), 86-92 (hero photos).
+    qualities: [70, 75, 86, 90, 92],
     remotePatterns: [
       {
         protocol: "https",
@@ -15,7 +17,6 @@ const nextConfig: NextConfig = {
         pathname: "**",
       },
     ],
-    unoptimized: true,
   },
 };
 
