@@ -1,0 +1,15 @@
+<!doctype html><meta charset="utf-8"><title>Second image board</title>
+<style>
+body{margin:0;background:#0a0a0a;color:#ddd;font:13px system-ui;padding:16px}
+.g{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.c{position:relative;aspect-ratio:16/9;overflow:hidden;border-radius:6px}
+.c img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.c .o{position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(10,10,10,.55) 0%,rgba(10,10,10,.6) 60%,rgba(10,10,10,.85) 100%)}
+.c h1{position:absolute;inset:0;margin:0;display:grid;place-items:center;font:900 9vw/1 system-ui;letter-spacing:-.04em;background:linear-gradient(180deg,#fff,#cfcfcf);-webkit-background-clip:text;color:transparent}
+.l{position:absolute;left:8px;top:6px;background:#000a;padding:2px 6px;border-radius:4px}
+</style>
+<div class="g" id="g"></div>
+<script>
+const P=[["A1 light lines","1762985304956-a188daf0dec5"],["A2 fluid curve","1762081512213-2acee44ffcdb"],["A3 dark waves","1761998066484-daa29b9ad605"],["N1 misty sea","1512122325348-f25085e0ecdb"],["N2 foggy ocean","1778856114999-b4a1c078742b"],["N3 night horizon","1770294139722-743ff4e8699e"],["R1 dark room window","1657934665023-3be2e3985aab"],["R2 Ando escalator sea","1728204096996-bf15cb158779"],["R3 Ando sky window","1703578697041-23a05de4ebba"],["R4 square opening","1752758059720-b79aacbb9471"]];
+g.innerHTML=P.map(([n,id])=>`<div class="c"><img src="https://images.unsplash.com/photo-${id}?w=1400&q=70"><div class="o"></div><h1>SERVICES</h1><span class="l">${n}</span></div>`).join("");
+</script>

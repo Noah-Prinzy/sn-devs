@@ -50,7 +50,7 @@ export function Rise({ children, delay = 0, className = "" }: { children: ReactN
     return (
         <motion.div
             initial={{ opacity: 0, y: 36, filter: "blur(10px)" }}
-            whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+            whileInView={{ opacity: 1, y: 0, filter: "blur(0px)", transitionEnd: { filter: "none" } }}
             viewport={{ once: true, margin: "-12% 0px" }}
             transition={{ duration: 0.8, delay, ease: [0.2, 0.8, 0.2, 1] }}
             className={className}

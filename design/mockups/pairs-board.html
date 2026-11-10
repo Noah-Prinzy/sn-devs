@@ -1,0 +1,27 @@
+<!doctype html><meta charset="utf-8"><title>Opener pairs</title>
+<style>
+body{margin:0;background:#0a0a0a;color:#ddd;font:13px system-ui;padding:16px}
+.r{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:22px}
+.c{position:relative;aspect-ratio:16/9;overflow:hidden;border-radius:6px}
+.c img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.o{position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(10,10,10,.55) 0%,rgba(10,10,10,.6) 60%,rgba(10,10,10,.85) 100%)}
+.p1 .o{background:rgba(10,10,10,.2)}
+.c h1{position:absolute;inset:0;margin:0;display:grid;place-items:center;font:900 8vw/1 system-ui;letter-spacing:-.04em;background:linear-gradient(180deg,#fff,#cfcfcf);-webkit-background-clip:text;color:transparent}
+.p1 h1{opacity:.55;transform:scale(.82)}
+.l{position:absolute;left:8px;top:6px;background:#000a;padding:2px 6px;border-radius:4px}
+</style>
+<div id="g"></div>
+<script>
+const P=[
+["S-A aisle → green racks","1580106815433-a5b1d1d53d85","1680992046626-418f7e910589"],
+["S-B sci-fi corridor → green cables","1663596990274-3fc2f5a4ce27","1680992044138-ce4864c2b962"],
+["S-C cable wall → circuit board","1558494949-ef010cbdcc31","1592659762303-90081d34b277"],
+["C-1 green code macro → green terminal blur","1722080826167-4ea87368cbc5","1608742213509-815b97c30b36"],
+["C-2 VS Code editor → defocused editor","1537884944318-390069bb8665","1517512006864-7edc3b933137"],
+["C-3 Python angle → near-black code","1774620396033-18782cda8242","1591206246042-2ed5fec8f27e"],
+["W-1 top-down dev → backlit keyboard","1550439062-609e1531270e","1574012716378-0ca6f4c18c08"],
+["W-2 night desk → teal keyboard blur","1542315192-1f61a1792f33","1555532538-dcdbd01d373d"],
+["W-3 dark studio → lone laptop","1697642438130-0158bc651cc3","1588620353536-ded12e518f45"]];
+const u=id=>`https://images.unsplash.com/photo-${id}?w=1200&q=70`;
+g.innerHTML=P.map(([n,a,b])=>`<div class="r"><div class="c p1"><img src="${u(a)}"><div class="o"></div><h1>SERVICES</h1><span class="l">${n} · phase 1</span></div><div class="c"><img src="${u(b)}"><div class="o"></div><h1>SERVICES</h1><span class="l">phase 2</span></div></div>`).join("");
+</script>

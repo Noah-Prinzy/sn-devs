@@ -12,7 +12,7 @@ import { TEMPLATES, TIERS, priceOf } from "@/data/templates";
 import { useScrollAnchors } from "@/components/use-scroll-anchors";
 import { BrowserFrame, useStill } from "@/components/store/browser-frame";
 import { PriceOdometer } from "@/components/store/price-odometer";
-import { IntroOpener, OPENER_STOPS } from "@/components/home/intro-opener";
+import { IntroOpener } from "@/components/home/intro-opener";
 import { Rise, Scene } from "@/components/home/scene";
 import { StepArt } from "@/components/home/graphics";
 
@@ -99,7 +99,7 @@ function Step({ s, i, still }: { s: (typeof STEPS)[number]; i: number; still: bo
     const ref = useRef<HTMLLIElement>(null);
     const seen = useInView(ref, { margin: "-15% 0px" });
     return (
-        <motion.li ref={ref} initial={{ opacity: 0, y: 28, filter: "blur(8px)" }} whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }} viewport={{ once: true, margin: "-10% 0px" }} transition={{ duration: 0.7, delay: 0.15 + i * 0.15 }}
+        <motion.li ref={ref} initial={{ opacity: 0, y: 28, filter: "blur(8px)" }} whileInView={{ opacity: 1, y: 0, filter: "blur(0px)", transitionEnd: { filter: "none" } }} viewport={{ once: true, margin: "-10% 0px" }} transition={{ duration: 0.7, delay: 0.15 + i * 0.15 }}
             className="border border-white/10 bg-black/55 p-3 backdrop-blur-md md:p-5">
             <div className="flex items-center gap-3">
                 <span className="grid size-7 shrink-0 place-items-center bg-[var(--brand)] font-mono text-xs font-semibold text-[var(--brand-fg)]">{i + 1}</span>
@@ -124,15 +124,7 @@ export function HomePage() {
     const hello = useRef<HTMLElement>(null);
     const groupRefs: Record<string, RefObject<HTMLElement | null>> = { build, care, create };
 
-    // Every scene is a stop: the intro's own steps, then one glide per scene.
-    useScrollAnchors(() => {
-        const h = opener.current!, run = h.offsetHeight - window.innerHeight;
-        return [
-            { y: h.offsetTop, glide: true },
-            ...OPENER_STOPS.map((f) => ({ y: Math.round(h.offsetTop + run * f), glide: f < 1 })),
-            ...[build, care, create, store, how, hello].map((r) => ({ y: r.current!.offsetTop })),
-        ];
-    });
+    useScrollAnchors();
 
     const { scrollYProgress: storeP } = useScroll({ target: store, offset: ["start end", "end start"] });
     const { scrollYProgress: howP } = useScroll({ target: how, offset: ["start 70%", "start start"] });

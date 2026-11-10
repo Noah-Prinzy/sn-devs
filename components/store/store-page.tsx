@@ -138,24 +138,12 @@ const STEPS = [
 export function StorePage() {
     const reduce = useStill();
     const hero = useRef<HTMLElement>(null);
-    const catalogue = useRef<HTMLElement>(null);
-    const featured = useRef<HTMLElement>(null);
-    const how = useRef<HTMLElement>(null);
     const { scrollYProgress } = useScroll({ target: hero, offset: ["start start", "end end"] });
     const word = useTransform(scrollYProgress, (v) => 0.82 + 0.18 * span(v, 0, 1));
     const lede = useTransform(scrollYProgress, (v) => span(v, 0.6, 0.9));
     const veil = useTransform(scrollYProgress, (v) => 0.35 + 0.5 * span(v, 0.6, 0.95));
 
-    useScrollAnchors(() => {
-        const h = hero.current!, vh = window.innerHeight;
-        return [
-            { y: h.offsetTop, glide: true },
-            { y: h.offsetTop + h.offsetHeight - vh },
-            { y: catalogue.current!.offsetTop },
-            { y: featured.current!.offsetTop },
-            { y: how.current!.offsetTop },
-        ];
-    });
+    useScrollAnchors();
 
     const [cat, setCat] = useState<Category | "all">("all");
     const shown = cat === "all" ? TEMPLATES : TEMPLATES.filter((t) => t.category === cat);
@@ -201,7 +189,7 @@ export function StorePage() {
                 </section>
 
                 {/* 2 · The catalogue */}
-                <section ref={catalogue} className="mx-auto max-w-7xl px-4 py-24 md:px-6" aria-labelledby="catalogue-title">
+                <section className="mx-auto max-w-7xl px-4 py-24 md:px-6" aria-labelledby="catalogue-title">
                     <div className="flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
                         <div>
                             <p className="text-xs uppercase tracking-[.3em] text-neutral-400">The catalogue</p>
@@ -253,7 +241,6 @@ export function StorePage() {
 
                 {/* 3 · Featured edition */}
                 <section
-                    ref={featured}
                     onPointerEnter={() => setHeld(true)}
                     onPointerLeave={() => setHeld(false)}
                     className="relative flex min-h-svh items-center overflow-hidden bg-[var(--brand)] px-4 py-24 text-[var(--brand-fg)] md:px-6"
@@ -303,7 +290,7 @@ export function StorePage() {
                 </section>
 
                 {/* 4 · How buying works */}
-                <section ref={how} className="mx-auto flex min-h-svh max-w-7xl flex-col justify-center px-4 py-24 md:px-6" aria-labelledby="how-title">
+                <section className="mx-auto flex min-h-svh max-w-7xl flex-col justify-center px-4 py-24 md:px-6" aria-labelledby="how-title">
                     <p className="text-xs uppercase tracking-[.3em] text-neutral-400">How buying works</p>
                     <h2 id="how-title" className="mt-3 max-w-xl font-heading text-5xl md:text-6xl">Three steps. About a minute.</h2>
                     <div className="mt-16 grid items-center gap-16 lg:grid-cols-[1.4fr_1fr]">

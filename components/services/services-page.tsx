@@ -43,20 +43,8 @@ export function ServicesPage() {
     const word = useTransform(scrollYProgress, (v) => 0.8 + 0.18 * span(v, 0, 1));
     const lede = useTransform(scrollYProgress, (v) => span(v, 0.55, 0.9));
     const reduce = useReducedMotion();
-    const board = useRef<HTMLElement>(null);
-    const packages = useRef<HTMLElement>(null);
 
-    // Anchored like Home: the opening scene is one glide, then each section top is a stop.
-    // A section taller than the screen (the list on phones) scrolls freely between them.
-    useScrollAnchors(() => {
-        const h = hero.current!, vh = window.innerHeight;
-        return [
-            { y: h.offsetTop, glide: true },
-            { y: h.offsetTop + h.offsetHeight - vh },
-            { y: board.current!.offsetTop },
-            { y: packages.current!.offsetTop },
-        ];
-    });
+    useScrollAnchors();
 
     // Cycle through the services until the visitor reaches for the list themselves.
     const [active, setActive] = useState(ALL[1].id);
@@ -99,7 +87,7 @@ export function ServicesPage() {
                     </div>
                 </section>
 
-                <section ref={board} className="mx-auto grid min-h-svh max-w-7xl items-center gap-12 px-4 py-24 md:grid-cols-[1fr_1.05fr] md:px-6" aria-label="All services and prices">
+                <section className="mx-auto grid min-h-svh max-w-7xl items-center gap-12 px-4 py-24 md:grid-cols-[1fr_1.05fr] md:px-6" aria-label="All services and prices">
                     <div onPointerEnter={() => setTouched(true)} onFocusCapture={() => setTouched(true)}>
                         {SERVICE_GROUPS.map((g) => (
                             <div key={g.id} className="mb-7">
@@ -165,7 +153,7 @@ export function ServicesPage() {
                     </div>
                 </section>
 
-                <section ref={packages} className="relative flex min-h-svh items-center overflow-hidden bg-[var(--brand)] px-4 py-28 text-[var(--brand-fg)] md:px-6" aria-labelledby="packages-title">
+                <section className="relative flex min-h-svh items-center overflow-hidden bg-[var(--brand)] px-4 py-28 text-[var(--brand-fg)] md:px-6" aria-labelledby="packages-title">
                     <Image src={`${CUT}/devices.png`} alt="" width={1295} height={1344} sizes="34vw" className="pointer-events-none absolute -top-24 right-[4vw] hidden h-auto w-[34vw] max-w-[520px] rotate-[-8deg] drop-shadow-[0_40px_50px_rgba(0,0,0,.35)] md:block" />
                     <div className="relative mx-auto w-full max-w-6xl">
                         <p className="text-xs font-semibold uppercase tracking-[.3em]">Website packages</p>
