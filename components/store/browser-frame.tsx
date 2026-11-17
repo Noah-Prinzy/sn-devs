@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import { useRef, useSyncExternalStore, type CSSProperties } from "react";
-import { usePausedMotion } from "@/components/motion-pref";
 import { motion, useInView } from "motion/react";
 import { shotsOf } from "@/components/store/shots";
 
@@ -75,7 +74,5 @@ const subscribeRM = (cb: () => void) => {
     return () => m.removeEventListener("change", cb);
 };
 export function useStill() {
-    const os = useSyncExternalStore(subscribeRM, () => window.matchMedia(RM).matches, () => false);
-    const paused = usePausedMotion();
-    return os || paused;
+    return useSyncExternalStore(subscribeRM, () => window.matchMedia(RM).matches, () => false);
 }

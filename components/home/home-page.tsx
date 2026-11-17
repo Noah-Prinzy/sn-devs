@@ -63,7 +63,7 @@ export function HomePage() {
                 <IntroOpener sectionRef={opener} />
 
                 {/* 2 · How we work */}
-                <Scene id="how" sectionRef={how} img="/assets/home/why-03-process-corridor.jpg" shade="full" label="How we work">
+                <Scene id="how" sectionRef={how} img="/assets/home/how-we-work-board.jpg" shade="full" label="How we work">
                     <Rise>
                         <p className="font-mono text-xs uppercase tracking-[.3em] text-(--brand)">How we work</p>
                         <h2 className="mt-4 max-w-3xl font-heading text-[clamp(1.6rem,1.4vw+3.4vh,4.5rem)] leading-[1.02]">From first sketch to <span className="italic text-(--brand)">launch day.</span></h2>
@@ -83,7 +83,7 @@ export function HomePage() {
                 </Scene>
 
                 {/* 3 · Say hello */}
-                <Scene id="hello" sectionRef={hello} img="/assets/home/cta-01-window-light.jpg" pos="65% 50%" shade="left" label="Say hello">
+                <Scene id="hello" sectionRef={hello} img="/assets/home/say-hello-phone.jpg" pos="65% 50%" shade="left" label="Say hello">
                     <div className="grid w-full items-center gap-10 md:grid-cols-[1.2fr_1fr] short:grid-cols-[1.2fr_1fr] short:gap-6">
                         <Rise className="order-2 md:order-1">
                             <p className="font-mono text-xs uppercase tracking-[.3em] text-(--brand)">Say hello</p>

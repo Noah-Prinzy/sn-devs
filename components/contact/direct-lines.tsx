@@ -1,56 +1,51 @@
-"use client";
+import { EnvelopeSimple, Phone, WhatsappLogo } from "@phosphor-icons/react/dist/ssr";
+import { PEOPLE } from "@/data/contact";
+import { CopyButton } from "@/components/contact/fields";
 
-import { EMAIL, PEOPLE, WHATSAPP_NUMBER } from "@/data/contact";
-import { CopyButton } from "@/components/contact/copy-button";
-import { cn } from "@/lib/utils";
+// "Rather skip the form?" on the page's one full green band (like the Services packages): Noah and Shaun side by side, each with WhatsApp, a call and an
+// email, and a copy button for the number and the address.
 
-// The direct lines: one mono row per channel, each a 44 px block link with a copy button
-// beside it (a sibling, never nested in the link). WhatsApp leads, the business line first,
-// because that is how Kampala reaches a studio. Plain elements only, so the band can sit
-// inside or outside a <form>.
-type Line = { key: string; label: string; value: string; href: string; copy: string; external?: boolean };
+const LINK =
+    "inline-flex min-h-11 items-center gap-2.5 text-neutral-100 underline-offset-4 transition-colors hover:text-(--brand) hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--brand)";
 
-const digits = (s: string) => s.replace(/\D/g, "");
-
-function lines(): Line[] {
-    // The person on the business WhatsApp line leads; the other follows.
-    const sorted = [...PEOPLE].sort((a, b) => Number(digits(b.tel) === digits(WHATSAPP_NUMBER)) - Number(digits(a.tel) === digits(WHATSAPP_NUMBER)));
-    const lead = sorted[0];
-    return [
-        ...sorted.map((p) => ({
-            key: `wa-${p.name}`,
-            label: "WhatsApp",
-            value: `${p.name} · ${p.phoneDisplay}`,
-            href: p.wa,
-            copy: p.phoneDisplay,
-            external: true,
-        })),
-        { key: "email", label: "Email", value: EMAIL, href: `mailto:${EMAIL}`, copy: EMAIL },
-        ...(lead ? [{ key: "call", label: "Call", value: `${lead.name} · ${lead.phoneDisplay}`, href: lead.tel, copy: lead.phoneDisplay }] : []),
-    ];
-}
-
-export function DirectLines({ className, note }: { className?: string; note?: string }) {
-    const rows = lines();
+export function DirectLines() {
     return (
-        <div role="group" aria-label="Reach us directly" className={cn("w-full", className)}>
-            {note && <p className="mb-3 font-mono text-xs uppercase tracking-[.3em] text-neutral-400">{note}</p>}
-            <div>
-                {rows.map((l) => (
-                    <div key={l.key} className="flex items-center gap-3 border-t border-white/15 last:border-b">
-                        <a
-                            href={l.href}
-                            target={l.external ? "_blank" : undefined}
-                            rel={l.external ? "noopener noreferrer" : undefined}
-                            className="group flex min-h-11 min-w-0 flex-1 items-center justify-between gap-4 py-2 outline-none transition-colors hover:text-(--brand) focus-visible:ring-2 focus-visible:ring-(--brand)/60 max-[360px]:flex-col max-[360px]:items-start max-[360px]:justify-center max-[360px]:gap-1"
-                        >
-                            <span className="w-20 shrink-0 font-mono text-[11px] font-semibold uppercase tracking-[.3em] text-(--brand) sm:w-24">{l.label}</span>
-                            <span className="min-w-0 flex-1 text-neutral-100 transition-colors wrap-anywhere group-hover:text-(--brand) max-[360px]:text-sm">{l.value}</span>
-                        </a>
-                        <CopyButton text={l.copy} name={`Copy ${l.label} ${l.value}`} />
+        <section aria-labelledby="direct-title" className="relative overflow-hidden bg-(--brand) px-4 py-24 text-(--brand-fg) md:mt-32 md:px-6 md:py-32">
+            <div className="relative mx-auto max-w-6xl">
+            <p className="font-mono text-xs font-semibold uppercase tracking-[.3em]">Direct lines</p>
+            <h2 id="direct-title" className="mt-4 font-heading text-5xl leading-[1.02] md:text-7xl">Rather skip the form?</h2>
+            <p className="mt-5 max-w-lg text-lg opacity-80">Write or call either of us directly. Same promise: a reply within one working day.</p>
+            <div className="mt-10 grid gap-3 md:grid-cols-2">
+                {PEOPLE.map((p) => (
+                    <div key={p.name} className="bg-[#0a0a0a] p-6 text-neutral-100 shadow-[0_30px_60px_rgba(0,0,0,.25)] md:p-8">
+                        <p className="font-heading text-3xl">{p.name}</p>
+                        <p className="mt-1 font-mono text-[11px] uppercase tracking-[.25em] text-neutral-400">{p.role}</p>
+                        <ul className="mt-6 divide-y divide-white/10 border-y border-white/10">
+                            <li className="flex items-center justify-between gap-3 py-2">
+                                <a href={p.wa} target="_blank" rel="noopener noreferrer" className={LINK}>
+                                    <WhatsappLogo className="size-5 text-(--brand)" />
+                                    WhatsApp <span className="text-neutral-400">{p.phoneDisplay}</span>
+                                </a>
+                                <CopyButton text={p.phoneDisplay} what={`${p.name}'s number`} />
+                            </li>
+                            <li className="flex items-center justify-between gap-3 py-2">
+                                <a href={p.tel} className={LINK}>
+                                    <Phone className="size-5 text-(--brand)" />
+                                    Call
+                                </a>
+                            </li>
+                            <li className="flex items-center justify-between gap-3 py-2">
+                                <a href={`mailto:${p.email}`} className={`${LINK} min-w-0 break-all`}>
+                                    <EnvelopeSimple className="size-5 shrink-0 text-(--brand)" />
+                                    {p.email}
+                                </a>
+                                <CopyButton text={p.email} what={`${p.name}'s email`} />
+                            </li>
+                        </ul>
                     </div>
                 ))}
             </div>
-        </div>
+            </div>
+        </section>
     );
 }

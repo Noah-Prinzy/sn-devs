@@ -96,14 +96,6 @@ export function kampalaNow(): { time: string; open: boolean } {
     return { time: `${get("hour")}:${get("minute")}`, open: inWeek && inHours };
 }
 
-// The status ticker under the opener (decoration; read by eyes, not screens).
-export const TICKER = [
-    "Accepting new projects",
-    "Reply within one working day",
-    "Kampala, EAT (UTC+3)",
-    "Noah & Shaun",
-];
-
 const clean = (v?: string) => (v ?? "").trim();
 
 // The letter, built only from the parts that exist: the subject never carries an empty

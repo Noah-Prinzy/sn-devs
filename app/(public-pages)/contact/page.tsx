@@ -4,7 +4,7 @@ import { EMAIL, PEOPLE, WHATSAPP_NUMBER, waLink } from "@/data/contact";
 export const metadata = {
     title: "Talk to us · S&N Devs",
     description:
-        "Tell us what you're building. A rough idea is enough. Email or WhatsApp, reply within one working day, Kampala.",
+        "Start a project, ask a quick question on WhatsApp, or get a template set up. Two people in Kampala, reply within one working day.",
 };
 
 // LocalBusiness structured data, built from the same contact data the page renders.

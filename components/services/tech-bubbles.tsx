@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState, type CSSProperties } from "react";
-import { useReducedMotion, type MotionValue } from "motion/react";
+import { type MotionValue } from "motion/react";
+import { useStill } from "@/components/store/browser-frame";
 import { AppWindow, ArrowsClockwise, FilmSlate, Globe, Layout, Megaphone, Presentation, Rocket, ShieldCheck, type Icon } from "@phosphor-icons/react";
 
 // Glass bubbles drifting in the hero's side gutters, each holding a tool we build with or a
@@ -75,7 +76,7 @@ type Dust = { x: number; y: number; vx: number; vy: number; size: number; green:
 type Burst = { x: number; y: number; r: number; born: number };
 
 export function TechBubbles({ progress }: { progress: MotionValue<number> }) {
-    const reduce = useReducedMotion();
+    const reduce = useStill(); // same answer on server and client (no hydration mismatch)
     const root = useRef<HTMLDivElement>(null);
     const canvas = useRef<HTMLCanvasElement>(null);
     const slots = useRef<(HTMLDivElement | null)[]>([]);

@@ -1,0 +1,359 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>About remake: round 2</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700&family=Geist+Mono:wght@400;600&family=Playfair+Display:wght@400&family=Young+Serif&family=Onest:wght@400;600&family=JetBrains+Mono:wght@400;500&family=Chivo+Mono:wght@500;700&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;1,6..96,400&family=Instrument+Sans:wght@400;600&family=Libre+Caslon+Display&family=Geologica:wght@300;400;600&family=Sometype+Mono:wght@400;500&family=Italiana&family=Tenor+Sans&family=Red+Hat+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root { --brand: #4ade80; --fg: #04130a; }
+  * { box-sizing: border-box; margin: 0; }
+  body { background: #161616; padding: 24px; font-family: "Playfair Display", serif; color: #eee; width: 1600px; }
+  .sheet-title { font: 700 30px "Roboto Slab", serif; margin-bottom: 4px; }
+  .sheet-sub { font: 12px "Geist Mono", monospace; color: #888; letter-spacing: .12em; margin-bottom: 26px; }
+  .row { display: grid; grid-template-columns: 232px 1294px; gap: 14px; margin-bottom: 40px; align-items: start; padding-bottom: 36px; border-bottom: 1px solid #262626; }
+  .label b { display: inline-block; background: var(--brand); color: #000; font: 700 22px "Geist Mono", monospace; padding: 2px 10px; }
+  .label h3 { font: 700 21px "Roboto Slab", serif; margin: 10px 0 8px; }
+  .label p { font-size: 13px; line-height: 1.45; color: #bbb; margin-bottom: 9px; }
+  .label .k { font: 600 10.5px "Geist Mono", monospace; letter-spacing: .14em; color: #888; text-transform: uppercase; margin: 12px 0 4px; }
+  .label .fonts { font-size: 12.5px; color: #ddd; line-height: 1.5; }
+  .label .pick { display: inline-block; color: var(--fg); background: var(--brand); font: 700 12px "Geist Mono", monospace; letter-spacing: .2em; padding: 5px 9px; margin-top: 12px; }
+  .frames { display: grid; gap: 14px; }
+  .top { display: grid; grid-template-columns: 640px 640px; gap: 14px; }
+  .bot { display: grid; grid-template-columns: 422px 422px 422px; gap: 14px; }
+  .frame { width: 640px; height: 400px; overflow: hidden; position: relative; background: #0a0a0a; border: 1px solid #333; }
+  .frame.sm { width: 422px; height: 264px; }
+  .frame > .s { width: 1440px; height: 900px; transform: scale(.4444); transform-origin: 0 0; position: absolute; inset: 0; background: #0a0a0a; overflow: hidden; }
+  .frame.sm > .s { transform: scale(.29306); }
+  .cap { font: 11px "Geist Mono", monospace; color: #888; margin-top: 6px; letter-spacing: .1em; text-transform: uppercase; }
+  .cap em { color: var(--brand); font-style: normal; }
+
+  .nav { position: absolute; top: 0; left: 0; right: 0; height: 84px; display: flex; align-items: center; padding: 0 28px; z-index: 20; background: linear-gradient(#0a0a0abf, transparent); }
+  .nav.solid { background: rgba(10,10,10,.88); }
+  .nav img { height: 30px; }
+  .nav .links { position: absolute; left: 50%; transform: translateX(-50%); display: flex; gap: 36px; font: 15px "Playfair Display"; color: #ddd; }
+  .nav .links .on { color: var(--brand); border-bottom: 1px solid var(--brand); padding-bottom: 4px; }
+  .nav .cta { margin-left: auto; background: var(--brand); color: var(--fg); font: 13px "Playfair Display"; letter-spacing: .15em; padding: 11px 16px; }
+
+  .fill { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .abs { position: absolute; }
+  .hint { position: absolute; left: 0; right: 0; bottom: 60px; text-align: center; font: 700 17px "Roboto Slab"; letter-spacing: .3em; color: #fff; }
+  .hint::after { content: ""; display: block; width: 5px; height: 5px; background: var(--brand); margin: 14px auto 0; }
+  .panel { background: linear-gradient(180deg,#262626 0%,#1a1a1a 55%,#121212 100%); overflow: hidden; position: absolute; }
+  .panel::before { content: ""; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 38%, rgba(74,222,128,.16), transparent 62%); }
+  .panel img { position: absolute; left: 50%; transform: translateX(-50%); top: 8%; filter: drop-shadow(0 0 40px rgba(0,0,0,.6)); }
+  .panel::after { content: ""; position: absolute; inset: auto 0 0 0; height: 30%; background: linear-gradient(transparent, #121212); }
+  .btn { display: inline-block; background: var(--brand); color: var(--fg); padding: 22px 30px; font-size: 20px; }
+
+  /* A: Young Serif / Onest / JetBrains Mono */
+  .dA { font-family: "Onest"; }
+  .dA h1, .dA h2, .dA .h { font-family: "Young Serif", serif; font-weight: 400; letter-spacing: -.01em; }
+  .dA .m { font: 500 14px "JetBrains Mono", monospace; letter-spacing: .22em; text-transform: uppercase; }
+  .win { position: absolute; background: #0f0f0f; border: 1px solid #333; overflow: hidden; }
+  .win .bar { height: 46px; border-bottom: 1px solid #2a2a2a; display: flex; align-items: center; gap: 10px; padding: 0 16px; background: #141414; }
+  .win .bar i { width: 11px; height: 11px; background: #333; display: block; }
+  .win .bar .url { margin-left: 18px; flex: 1; height: 28px; background: #0a0a0a; border: 1px solid #262626; font: 14px "JetBrains Mono"; color: #999; display: flex; align-items: center; padding: 0 12px; }
+  .wf { position: absolute; border: 2px dashed #3a3a3a; }
+  .tag { position: absolute; background: #0a0a0a; border: 1px solid var(--brand); padding: 10px 14px; font: 500 13px "JetBrains Mono"; letter-spacing: .18em; text-transform: uppercase; color: var(--brand); }
+  /* B: Bodoni Moda / Instrument Sans / Chivo Mono flaps */
+  .dB { font-family: "Instrument Sans"; }
+  .dB h1, .dB h2, .dB .h { font-family: "Bodoni Moda", serif; font-weight: 400; }
+  .dB .m { font: 500 14px "Chivo Mono", monospace; letter-spacing: .22em; text-transform: uppercase; }
+  .flap { display: inline-flex; gap: 4px; }
+  .flap span { position: relative; display: inline-grid; place-items: center; background: linear-gradient(#1b1b1b 50%, #151515 50%); color: #f2f2f2; font-family: "Chivo Mono", monospace; font-weight: 700; }
+  .flap span::after { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 2px; background: #0a0a0a; }
+  .flap.g span { color: var(--brand); }
+  .flap span.mid { background: linear-gradient(#262626 50%, #151515 50%); color: #888; transform: perspective(200px) rotateX(-38deg); transform-origin: 50% 50%; }
+  .board { position: absolute; background: #0d0d0d; border: 1px solid #2a2a2a; padding: 34px 40px; }
+  .board .hd { display: flex; justify-content: space-between; color: #888; margin-bottom: 26px; }
+  /* C: Libre Caslon Display / Geologica / Sometype Mono */
+  .dC { font-family: "Geologica"; font-weight: 300; }
+  .dC h1, .dC h2, .dC .h { font-family: "Libre Caslon Display", serif; font-weight: 400; }
+  .dC .m { font: 500 14px "Sometype Mono", monospace; letter-spacing: .24em; text-transform: uppercase; }
+  /* D: Italiana / Tenor Sans / Red Hat Mono */
+  .dD { font-family: "Tenor Sans"; }
+  .dD h1, .dD h2, .dD .h { font-family: "Italiana", serif; font-weight: 400; }
+  .dD .m { font: 500 14px "Red Hat Mono", monospace; letter-spacing: .32em; text-transform: uppercase; }
+  .credits { display: grid; grid-template-columns: 1fr 1fr; column-gap: 40px; row-gap: 30px; align-items: baseline; }
+  .credits .r { text-align: right; font: 500 15px "Red Hat Mono"; letter-spacing: .3em; text-transform: uppercase; color: #8a8a8a; }
+  .credits .n { font: 34px "Tenor Sans"; }
+  .letterbox::before, .letterbox::after { content: ""; position: absolute; left: 0; right: 0; height: 70px; background: #000; z-index: 4; }
+  .letterbox::before { top: 84px; } .letterbox::after { bottom: 0; }
+</style>
+</head>
+<body>
+
+<p class="sheet-title">About, remade: round 2</p>
+<p class="sheet-sub">KAISER · 2026-11-17 · BRIEF: DESIGN/ABOUT/ABOUT-BRIEF.MD · NO DESK PHOTO, NO GUIDE LINE, NO MAP, NO FORM, NO GIANT WORD · FRAMES 1440×900, SCALED</p>
+
+<!-- ============ A: THE SITE THAT BUILDS ITSELF ============ -->
+<div class="row">
+  <div class="label"><b>01</b><h3>The site that builds itself</h3>
+    <p>The page shows rather than tells. One browser window sits beside the headline, holding only a grey wireframe tagged "Shaun · design".</p>
+    <p>Scrolling builds it in stages, one at a time: the type sets, the photo fades in, it goes live ("Noah · engineering") and a small green "live" light comes on. The headline turns from "We build it." to "We keep it running." The window then splits into two founder windows, the promises are four tabs that advance as you scroll, and the close is an empty window waiting for your address.</p>
+    <p class="k">Fonts</p><p class="fonts">Young Serif, Onest, JetBrains Mono</p>
+    <p class="k">Needs</p><p class="fonts">One photo inside the demo site: any calm, people-free image (stand-in: home/hero-horizon-gate.jpg).</p>
+    <p class="pick">KAISER PICK</p></div>
+  <div class="frames">
+    <div class="top">
+      <div><div class="frame"><div class="s dA" data-nav>
+        <div class="abs" style="left:120px;top:250px;width:470px">
+          <p class="m" style="color:var(--brand)">About · Shaun &amp; Noah</p>
+          <h1 style="font-size:100px;line-height:1;margin-top:26px">We build it.</h1>
+          <p style="font-size:21px;line-height:1.5;color:#bbb;margin-top:30px">A two-person web and creative studio in Kampala. Watch one get made.</p>
+        </div>
+        <div class="win" style="left:650px;top:190px;width:680px;height:500px">
+          <div class="bar"><i></i><i></i><i></i><span class="url">yourbusiness.ug<span style="display:inline-block;width:8px;height:16px;background:var(--brand);margin-left:3px"></span></span></div>
+          <div class="wf" style="left:40px;top:80px;width:110px;height:22px"></div><div class="wf" style="left:430px;top:80px;width:210px;height:22px"></div>
+          <div class="wf" style="left:40px;top:140px;width:300px;height:44px"></div><div class="wf" style="left:40px;top:196px;width:240px;height:44px"></div>
+          <div class="wf" style="left:40px;top:270px;width:260px;height:16px"></div><div class="wf" style="left:40px;top:296px;width:200px;height:16px"></div>
+          <div class="wf" style="left:40px;top:350px;width:150px;height:46px"></div>
+          <div class="wf" style="left:370px;top:140px;width:270px;height:260px"><svg width="266" height="256" style="position:absolute;inset:0"><line x1="0" y1="0" x2="266" y2="256" stroke="#3a3a3a" stroke-width="2" stroke-dasharray="6 6"/><line x1="266" y1="0" x2="0" y2="256" stroke="#3a3a3a" stroke-width="2" stroke-dasharray="6 6"/></svg></div>
+        </div>
+        <p class="tag" style="left:610px;top:640px">Shaun · design</p>
+        <p class="hint">SCROLL</p>
+      </div></div><p class="cap">AT REST: A WIREFRAME, WAITING</p></div>
+      <div><div class="frame"><div class="s dA" data-nav="solid">
+        <div class="abs" style="left:120px;top:250px;width:470px">
+          <p class="m" style="color:#777;text-decoration:line-through">We build it.</p>
+          <h1 style="font-size:92px;line-height:1;margin-top:22px">We keep it <span style="color:var(--brand)">running.</span></h1>
+        </div>
+        <div class="win" style="left:650px;top:190px;width:680px;height:500px">
+          <div class="bar"><i style="background:#555"></i><i style="background:#555"></i><i style="background:#555"></i><span class="url">https://yourbusiness.ug</span></div>
+          <p class="abs" style="left:40px;top:80px;font:600 18px Onest">Nile Bakery</p><p class="abs" style="left:430px;top:82px;font-size:15px;color:#aaa;word-spacing:18px">Menu Order Visit</p>
+          <p class="abs h" style="left:40px;top:136px;width:310px;font-size:44px;line-height:1.08">Fresh every morning in Kololo.</p>
+          <p class="abs" style="left:40px;top:288px;width:290px;font-size:16px;color:#aaa;line-height:1.5">Order before 9 and collect on your way to work.</p>
+          <p class="abs" style="left:40px;top:350px;background:var(--brand);color:var(--fg);padding:13px 20px;font-weight:600">Order now</p>
+          <img class="abs" src="../../public/assets/home/hero-horizon-gate.jpg" style="left:370px;top:140px;width:270px;height:260px;object-fit:cover">
+        </div>
+        <div class="abs" style="left:650px;top:706px;width:680px;display:flex;gap:28px;align-items:center;font:14px 'JetBrains Mono';color:#aaa;letter-spacing:.1em">
+          <span style="color:var(--brand)">■ LIVE</span><span>KEPT CURRENT ON A CARE PLAN</span>
+        </div>
+        <p class="tag" style="left:610px;top:640px;color:#888;border-color:#444">Shaun · design ✓</p>
+        <p class="tag" style="left:1180px;top:150px">Noah · engineering</p>
+      </div></div><p class="cap">AFTER SCROLL: BUILT, LIVE, HEADLINE TURNS OVER <em>(DEMO CLIENT IS FICTIONAL)</em></p></div>
+    </div>
+    <div class="bot">
+      <div><div class="frame sm"><div class="s dA" data-nav="solid">
+        <p class="m abs" style="left:120px;top:140px;color:#999">01 · Who built it</p>
+        <div class="win" style="left:120px;top:190px;width:580px;height:600px"><div class="bar"><i></i><i></i><i></i><span class="url">shaun / design</span></div>
+          <div class="panel" style="left:0;top:46px;width:580px;height:340px"><img src="../../public/assets/home/people/shaun-placeholder.webp" style="width:32%"></div>
+          <div class="abs" style="left:34px;top:410px;right:34px"><h2 style="font-size:58px">Shaun</h2><p style="font-size:20px;color:#bbb;margin-top:10px;line-height:1.45">Leads design and the creative studio: UI, video, presentations and ad creative.</p></div></div>
+        <div class="win" style="left:740px;top:190px;width:580px;height:600px"><div class="bar"><i></i><i></i><i></i><span class="url">noah / engineering</span></div>
+          <div class="panel" style="left:0;top:46px;width:580px;height:340px"><img src="../../public/assets/home/people/noah-placeholder.webp" style="width:37%"></div>
+          <div class="abs" style="left:34px;top:410px;right:34px"><h2 style="font-size:58px">Noah</h2><p style="font-size:20px;color:#bbb;margin-top:10px;line-height:1.45">Leads engineering: web apps, custom systems, care plans and upgrades.</p></div></div>
+      </div></div><p class="cap">WHO WE ARE: THE WINDOW SPLITS INTO TWO</p></div>
+      <div><div class="frame sm"><div class="s dA" data-nav="solid">
+        <p class="m abs" style="left:120px;top:140px;color:#999">02 · How we work</p>
+        <div class="win" style="left:120px;top:190px;width:1200px;height:600px">
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid #2a2a2a;font-size:20px">
+            <p style="padding:22px 26px;color:#666;border-right:1px solid #2a2a2a">01 Quote ✓</p>
+            <p style="padding:22px 26px;background:#0a0a0a;border-top:3px solid var(--brand);border-right:1px solid #2a2a2a">02 Talk</p>
+            <p style="padding:22px 26px;color:#666;border-right:1px solid #2a2a2a">03 Timeline</p>
+            <p style="padding:22px 26px;color:#666">04 Care</p>
+          </div>
+          <div style="padding:70px 60px">
+            <h2 style="font-size:72px;line-height:1.05">Talk to the <span style="color:var(--brand)">builders.</span></h2>
+            <p style="font-size:26px;color:#bbb;margin-top:30px;max-width:760px;line-height:1.5">No account manager, no middle layer. The two people who design and build your site are the two people you message.</p>
+          </div>
+          <div class="abs" style="left:0;bottom:0;height:4px;width:50%;background:var(--brand)"></div>
+        </div>
+      </div></div><p class="cap">HOW WE WORK: FOUR TABS, SCROLL ADVANCES THEM</p></div>
+      <div><div class="frame sm"><div class="s dA" data-nav="solid">
+        <div class="abs" style="left:120px;top:260px;width:520px"><h2 style="font-size:100px;line-height:1">Yours is <span style="color:var(--brand)">next.</span></h2><p style="font-size:22px;color:#bbb;margin-top:28px;line-height:1.5">Fixed quote first. Reply within one working day.</p><p class="btn" style="margin-top:40px">Get in touch &rarr;</p></div>
+        <div class="win" style="left:720px;top:210px;width:600px;height:460px"><div class="bar"><i></i><i></i><i></i><span class="url">your-business-here<span style="display:inline-block;width:8px;height:16px;background:var(--brand);margin-left:3px"></span></span></div>
+          <p class="abs m" style="left:0;right:0;top:230px;text-align:center;color:#555">Empty, for now</p></div>
+      </div></div><p class="cap">CLOSE: AN EMPTY WINDOW WITH YOUR NAME IN IT</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ B: DEPARTURES BOARD ============ -->
+<div class="row">
+  <div class="label"><b>02</b><h3>Departures board</h3>
+    <p>A split-flap board, the kind at a station, fills the opener. It reads the headline in tiles, with one row still mid-flip.</p>
+    <p>Scrolling turns it into a departures list: where projects go and how long they take (launch page about a week, website two to three). One row flips at a time, top to bottom, with a quiet click, so the eye just reads down. The founders are the "crew", the promises flip to CONFIRMED, and the close reads "Next departure: your project · BOARDING".</p>
+    <p class="k">Fonts</p><p class="fonts">Chivo Mono (tiles), Bodoni Moda, Instrument Sans</p>
+    <p class="k">Needs</p><p class="fonts">No photos. Optional soft flap sound, off by default.</p></div>
+  <div class="frames">
+    <div class="top">
+      <div><div class="frame"><div class="s dB" data-nav style="background:radial-gradient(ellipse at 50% 55%,#141a16,#0a0a0a 65%)">
+        <p class="m abs" style="left:0;right:0;top:170px;text-align:center;color:var(--brand)">About · S&amp;N Devs · Kampala</p>
+        <div class="board" style="left:200px;top:220px;width:1040px">
+          <div style="display:grid;gap:10px">
+            <div class="flap" data-flap="WE BUILD IT." data-w="66" data-h="92" data-f="56"></div>
+            <div class="flap" data-flap="WE KEEP IT" data-w="66" data-h="92" data-f="56"></div>
+            <div class="flap g" data-flap="RUNNIN" data-mid="G" data-w="66" data-h="92" data-f="56"></div>
+          </div>
+        </div>
+        <p class="abs" style="left:0;right:0;top:640px;text-align:center;font-size:22px;color:#aaa">A two-person web and creative studio, run by Shaun and Noah.</p>
+        <p class="hint">SCROLL</p>
+      </div></div><p class="cap">AT REST: THE LAST TILE STILL TURNING</p></div>
+      <div><div class="frame"><div class="s dB" data-nav="solid">
+        <h2 class="abs" style="left:120px;top:140px;font-size:60px">Where your project <i style="color:var(--brand)">is going.</i></h2>
+        <div class="board" style="left:120px;top:260px;width:1200px;padding:30px 36px">
+          <div class="hd m" style="display:grid;grid-template-columns:470px 330px 1fr;font-size:13px"><span>Destination</span><span>Takes</span><span>Status</span></div>
+          <div style="display:grid;gap:12px">
+            <div style="display:grid;grid-template-columns:470px 330px 1fr"><div class="flap" data-flap="LAUNCH PAGE" data-w="36" data-h="54" data-f="30"></div><div class="flap" data-flap="1 WEEK" data-w="36" data-h="54" data-f="30"></div><div class="flap g" data-flap="ON TIME" data-w="36" data-h="54" data-f="30"></div></div>
+            <div style="display:grid;grid-template-columns:470px 330px 1fr"><div class="flap" data-flap="WEBSITE" data-w="36" data-h="54" data-f="30"></div><div class="flap" data-flap="2-3 WKS" data-w="36" data-h="54" data-f="30"></div><div class="flap g" data-flap="ON TIME" data-w="36" data-h="54" data-f="30"></div></div>
+            <div style="display:grid;grid-template-columns:470px 330px 1fr"><div class="flap" data-flap="WEB APP" data-w="36" data-h="54" data-f="30"></div><div class="flap" data-flap="QUOTED" data-w="36" data-h="54" data-f="30"></div><div class="flap g" data-flap="BOARDI" data-mid="N" data-w="36" data-h="54" data-f="30"></div></div>
+            <div style="display:grid;grid-template-columns:470px 330px 1fr;opacity:.35"><div class="flap" data-flap="CARE PLAN" data-w="36" data-h="54" data-f="30"></div><div class="flap" data-flap="MONTHLY" data-w="36" data-h="54" data-f="30"></div><div class="flap" data-flap="       " data-w="36" data-h="54" data-f="30"></div></div>
+          </div>
+        </div>
+      </div></div><p class="cap">AFTER SCROLL: A DEPARTURES LIST, ONE ROW FLIPPING AT A TIME</p></div>
+    </div>
+    <div class="bot">
+      <div><div class="frame sm"><div class="s dB" data-nav="solid">
+        <p class="m abs" style="left:120px;top:140px;color:#999">01 · Crew</p>
+        <div class="panel" style="left:120px;top:190px;width:580px;height:440px"><img src="../../public/assets/home/people/shaun-placeholder.webp" style="width:32%"></div>
+        <div class="panel" style="left:740px;top:190px;width:580px;height:440px"><img src="../../public/assets/home/people/noah-placeholder.webp" style="width:37%"></div>
+        <div class="abs" style="left:120px;top:650px"><div class="flap" data-flap="SHAUN" data-w="52" data-h="72" data-f="42"></div><p style="font-size:21px;color:#bbb;margin-top:16px;width:560px;line-height:1.45">Design and the creative studio: UI, video, decks, ads.</p></div>
+        <div class="abs" style="left:740px;top:650px"><div class="flap" data-flap="NOAH" data-w="52" data-h="72" data-f="42"></div><p style="font-size:21px;color:#bbb;margin-top:16px;width:560px;line-height:1.45">Engineering: web apps, systems, care and upgrades.</p></div>
+      </div></div><p class="cap">WHO WE ARE: THE CREW, NAMES IN TILES</p></div>
+      <div><div class="frame sm"><div class="s dB" data-nav="solid">
+        <p class="m abs" style="left:120px;top:140px;color:#999">02 · Before you board</p>
+        <div class="abs" style="left:120px;top:200px;width:1200px;display:grid;gap:26px">
+          <div style="display:grid;grid-template-columns:1fr 330px;align-items:center;border-bottom:1px solid #262626;padding-bottom:22px"><div><p class="h" style="font-size:44px">Fixed quote first</p><p style="font-size:20px;color:#999;margin-top:6px">Price agreed before a line is written.</p></div><div class="flap g" data-flap="CONFIRMED" data-w="34" data-h="48" data-f="26"></div></div>
+          <div style="display:grid;grid-template-columns:1fr 330px;align-items:center;border-bottom:1px solid #262626;padding-bottom:22px"><div><p class="h" style="font-size:44px">Talk to the builders</p><p style="font-size:20px;color:#999;margin-top:6px">Two people, direct line.</p></div><div class="flap g" data-flap="CONFIRMED" data-w="34" data-h="48" data-f="26"></div></div>
+          <div style="display:grid;grid-template-columns:1fr 330px;align-items:center;border-bottom:1px solid #262626;padding-bottom:22px"><div><p class="h" style="font-size:44px">Honest timelines</p><p style="font-size:20px;color:#999;margin-top:6px">A week for a launch page.</p></div><div class="flap" data-flap="CONFIR" data-mid="M" data-w="34" data-h="48" data-f="26"></div></div>
+          <div style="display:grid;grid-template-columns:1fr 330px;align-items:center;opacity:.35"><div><p class="h" style="font-size:44px">We stay on</p><p style="font-size:20px;color:#999;margin-top:6px">Care plans from UGX 120,000/mo.</p></div><div class="flap" data-flap="         " data-w="34" data-h="48" data-f="26"></div></div>
+        </div>
+      </div></div><p class="cap">HOW WE WORK: PROMISES FLIP TO CONFIRMED</p></div>
+      <div><div class="frame sm"><div class="s dB" data-nav="solid">
+        <p class="m abs" style="left:0;right:0;top:200px;text-align:center;color:#999">Next departure</p>
+        <div class="abs" style="left:0;right:0;top:260px;text-align:center"><div class="flap" data-flap="YOUR PROJECT" data-w="70" data-h="98" data-f="60"></div></div>
+        <div class="abs" style="left:0;right:0;top:400px;text-align:center"><div class="flap g" data-flap="BOARDING" data-w="44" data-h="62" data-f="36"></div></div>
+        <div class="abs" style="left:0;right:0;top:560px;text-align:center"><p class="btn" style="font-family:'Instrument Sans';font-size:24px;padding:24px 40px">Get in touch &rarr;</p><p class="m" style="font-size:13px;color:#888;margin-top:24px">Reply within one working day</p></div>
+      </div></div><p class="cap">CLOSE: NEXT DEPARTURE, YOUR PROJECT</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ C: DIPTYCH ============ -->
+<div class="row">
+  <div class="label"><b>03</b><h3>Diptych</h3>
+    <p>Two tall still-life photos side by side, one per craft: drawing tools for Shaun, hardware for Noah. A dark seam between them, and the headline split across it: "Drawn by Shaun. Built by Noah."</p>
+    <p>Scrolling slides the two halves together until the seam closes, and they dissolve into one finished thing (a site on a screen). The pairs carry on down the page: two portraits, promises as a left/right ledger split by the seam, and a close that says you bring the third half, the idea.</p>
+    <p class="k">Fonts</p><p class="fonts">Libre Caslon Display, Geologica (light), Sometype Mono</p>
+    <p class="k">Needs</p><p class="fonts">2 stock photos, no people, top-down on dark slate: pencils, swatches and a sketchbook; a circuit board or keyboard macro. Stand-ins shown.</p></div>
+  <div class="frames">
+    <div class="top">
+      <div><div class="frame"><div class="s dC" data-nav>
+        <img class="abs" src="../../public/assets/home/why-04-planning-notebook.jpg" style="left:0;top:0;width:660px;height:900px;object-fit:cover;filter:brightness(.75)">
+        <img class="abs" src="../../public/assets/home/scene-build-code.jpg" style="left:780px;top:0;width:660px;height:900px;object-fit:cover;filter:brightness(.6)">
+        <div class="abs" style="inset:0;background:linear-gradient(0deg,rgba(10,10,10,.92),rgba(10,10,10,0) 55%)"></div>
+        <p class="m abs" style="left:0;right:0;top:400px;text-align:center;color:var(--brand);writing-mode:vertical-rl;height:300px;margin:0 auto;width:20px">S &amp; N</p>
+        <h1 class="abs" style="left:120px;top:600px;font-size:84px;line-height:1">Drawn by <i>Shaun.</i></h1>
+        <h1 class="abs" style="left:840px;top:600px;font-size:84px;line-height:1">Built by <i style="color:var(--brand)">Noah.</i></h1>
+        <p class="m abs" style="left:122px;top:720px;color:#aaa;font-size:13px">Design &amp; creative</p>
+        <p class="m abs" style="left:842px;top:720px;color:#aaa;font-size:13px">Engineering &amp; care</p>
+      </div></div><p class="cap">AT REST: TWO HALVES, ONE SEAM <em>(PHOTOS ARE STAND-INS)</em></p></div>
+      <div><div class="frame"><div class="s dC" data-nav="solid">
+        <img class="fill" src="../../public/assets/home/work-02-website-launch.jpg" style="filter:brightness(.4) blur(2px);object-position:80% 50%">
+        <img class="abs" src="../../public/assets/home/why-04-planning-notebook.jpg" style="left:0;top:0;width:720px;height:900px;object-fit:cover;opacity:.18">
+        <div class="abs" style="inset:0;background:linear-gradient(90deg,rgba(10,10,10,.95) 35%,rgba(10,10,10,.3) 75%)"></div>
+        <div class="abs" style="left:120px;top:280px;width:720px">
+          <p class="m" style="color:var(--brand)">About · Kampala</p>
+          <h2 style="font-size:88px;line-height:1;margin-top:24px;white-space:nowrap">Two halves. <i style="color:var(--brand)">One site.</i></h2>
+          <p style="font-size:22px;line-height:1.55;color:#ccc;margin-top:30px">A two-person studio: the design and the engineering are done by the people you talk to.</p>
+        </div>
+      </div></div><p class="cap">AFTER SCROLL: THE SEAM CLOSES, THE HALVES BECOME ONE <em>(STAND-IN)</em></p></div>
+    </div>
+    <div class="bot">
+      <div><div class="frame sm"><div class="s dC" data-nav="solid">
+        <div class="panel" style="left:0;top:84px;width:715px;height:816px"><img src="../../public/assets/home/people/shaun-placeholder.webp" style="width:34%;top:10%"></div>
+        <div class="panel" style="left:725px;top:84px;width:715px;height:816px"><img src="../../public/assets/home/people/noah-placeholder.webp" style="width:39%;top:10%"></div>
+        <div class="abs" style="left:715px;top:84px;width:10px;height:816px;background:#0a0a0a"></div>
+        <div class="abs" style="left:80px;top:660px;width:560px;z-index:3"><h2 style="font-size:76px">Shaun</h2><p style="font-size:21px;color:#ccc;margin-top:8px;line-height:1.45">Design and the creative studio.</p></div>
+        <div class="abs" style="left:805px;top:660px;width:560px;z-index:3"><h2 style="font-size:76px">Noah</h2><p style="font-size:21px;color:#ccc;margin-top:8px;line-height:1.45">Engineering, systems and care.</p></div>
+      </div></div><p class="cap">WHO WE ARE: THE DIPTYCH AS TWO PORTRAITS</p></div>
+      <div><div class="frame sm"><div class="s dC" data-nav="solid">
+        <p class="m abs" style="left:0;right:0;top:150px;text-align:center;color:#999">What you get &nbsp;|&nbsp; What it costs you</p>
+        <div class="abs" style="left:718px;top:210px;width:4px;height:600px;background:linear-gradient(var(--brand) 60%,#262626 60%)"></div>
+        <div class="abs" style="left:120px;top:220px;width:1200px;display:grid;grid-template-columns:1fr 1fr;column-gap:120px;row-gap:46px;font-size:22px">
+          <p class="h" style="font-size:46px;text-align:right">A fixed quote</p><p style="color:#bbb;padding-top:12px">Nothing extra: price agreed before a line is written.</p>
+          <p class="h" style="font-size:46px;text-align:right">The builders, direct</p><p style="color:#bbb;padding-top:12px">One message, two people. No middle layer.</p>
+          <p class="h" style="font-size:46px;text-align:right;opacity:.4">Honest timelines</p><p style="color:#bbb;padding-top:12px;opacity:.4">A week for a launch page; two to three for a site.</p>
+          <p class="h" style="font-size:46px;text-align:right;opacity:.25">We stay on</p><p style="color:#bbb;padding-top:12px;opacity:.25">Care plans from UGX 120,000 a month.</p>
+        </div>
+      </div></div><p class="cap">HOW WE WORK: A TWO-SIDED LEDGER ON THE SEAM</p></div>
+      <div><div class="frame sm"><div class="s dC" data-nav="solid">
+        <img class="abs" src="../../public/assets/home/why-04-planning-notebook.jpg" style="left:0;top:0;width:470px;height:900px;object-fit:cover;filter:brightness(.4)">
+        <img class="abs" src="../../public/assets/home/scene-build-code.jpg" style="left:970px;top:0;width:470px;height:900px;object-fit:cover;filter:brightness(.35)">
+        <div class="abs" style="left:480px;top:84px;width:480px;height:816px;border:2px dashed rgba(74,222,128,.6)"></div>
+        <div class="abs" style="left:480px;width:480px;top:300px;text-align:center"><p class="m" style="color:var(--brand)">The third half</p><h2 style="font-size:84px;line-height:1;margin-top:24px">Your <i>idea.</i></h2><p class="btn" style="margin-top:44px;font-family:Geologica;font-weight:400">Get in touch &rarr;</p></div>
+      </div></div><p class="cap">CLOSE: THE MIDDLE PANEL IS YOURS</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ D: END CREDITS ============ -->
+<div class="row">
+  <div class="label"><b>04</b><h3>End credits</h3>
+    <p>The About page as a film's closing credits. It opens on a still title card between thin letterbox bars: "S&amp;N Devs presents · We build it. We keep it running."</p>
+    <p>Scrolling rolls the credits up at an even pace. Each line is brightest as it crosses the middle of the screen and fades towards the edges, so the eye never moves. The founders get a "Starring" card, the promises roll as numbered notes, and the page ends on "The end of this page. The start of yours."</p>
+    <p class="k">Fonts</p><p class="fonts">Italiana, Tenor Sans, Red Hat Mono</p>
+    <p class="k">Needs</p><p class="fonts">No photos. A fine film grain over black.</p></div>
+  <div class="frames">
+    <div class="top">
+      <div><div class="frame"><div class="s dD letterbox" data-nav style="background:radial-gradient(ellipse at 50% 50%,#131313,#070707 70%)">
+        <div class="abs" style="left:0;right:0;top:300px;text-align:center">
+          <p class="m" style="color:#999">S&amp;N Devs presents</p>
+          <h1 style="font-size:118px;line-height:1.05;margin-top:30px">We build it.<br><span style="color:var(--brand)">We keep it running.</span></h1>
+          <p class="m" style="color:#777;margin-top:40px;font-size:13px">A Kampala production</p>
+        </div>
+        <p class="hint" style="bottom:110px;z-index:5;font-family:'Red Hat Mono';font-weight:500">SCROLL</p>
+      </div></div><p class="cap">AT REST: A STILL TITLE CARD</p></div>
+      <div><div class="frame"><div class="s dD letterbox" data-nav="solid" style="background:#070707">
+        <div class="abs" style="left:0;right:0;top:150px;-webkit-mask-image:linear-gradient(transparent,#000 30%,#000 70%,transparent);mask-image:linear-gradient(transparent,#000 30%,#000 70%,transparent);height:700px;overflow:hidden">
+          <div class="credits" style="padding:0 220px;margin-top:40px">
+            <span class="r">Design &amp; creative</span><span class="n">Shaun</span>
+            <span class="r">Engineering</span><span class="n">Noah</span>
+            <span class="r">Filmed on location</span><span class="n">Kampala, Uganda</span>
+            <span class="r">Services</span><span class="n">Nine, each with a clear price</span>
+            <span class="r">Quotes</span><span class="n">Fixed, up front</span>
+            <span class="r">Middle layer</span><span class="n" style="color:#777">None</span>
+            <span class="r">Replies</span><span class="n">Within one working day</span>
+            <span class="r">After launch</span><span class="n">We stay on</span>
+          </div>
+        </div>
+      </div></div><p class="cap">AFTER SCROLL: THE CREDITS ROLL, BRIGHTEST AT THE CENTRE</p></div>
+    </div>
+    <div class="bot">
+      <div><div class="frame sm"><div class="s dD" data-nav="solid" style="background:#070707">
+        <p class="m abs" style="left:0;right:0;top:140px;text-align:center;color:#999">Starring</p>
+        <div class="panel" style="left:220px;top:200px;width:460px;height:470px"><img src="../../public/assets/home/people/shaun-placeholder.webp" style="width:40%"></div>
+        <div class="panel" style="left:760px;top:200px;width:460px;height:470px"><img src="../../public/assets/home/people/noah-placeholder.webp" style="width:46%"></div>
+        <div class="abs" style="left:220px;top:690px;width:460px;text-align:center"><h2 style="font-size:80px;line-height:1">Shaun</h2><p class="m" style="font-size:13px;color:#999;margin-top:14px">as the designer</p></div>
+        <div class="abs" style="left:760px;top:690px;width:460px;text-align:center"><h2 style="font-size:80px;line-height:1">Noah</h2><p class="m" style="font-size:13px;color:#999;margin-top:14px">as the engineer</p></div>
+      </div></div><p class="cap">WHO WE ARE: THE "STARRING" CARD</p></div>
+      <div><div class="frame sm"><div class="s dD" data-nav="solid" style="background:#070707">
+        <div class="abs" style="left:0;right:0;top:120px;height:780px;-webkit-mask-image:linear-gradient(transparent,#000 25%,#000 75%,transparent);mask-image:linear-gradient(transparent,#000 25%,#000 75%,transparent)">
+          <div style="text-align:center;padding-top:90px;display:grid;gap:52px">
+            <div style="opacity:.5"><p class="m" style="color:var(--brand)">Note 01</p><h2 style="font-size:58px;margin-top:10px">A fixed quote, first.</h2></div>
+            <div><p class="m" style="color:var(--brand)">Note 02</p><h2 style="font-size:66px;margin-top:10px">You talk to the people who build it.</h2><p style="font-size:22px;color:#aaa;margin-top:12px">No middle layer.</p></div>
+            <div style="opacity:.5"><p class="m" style="color:var(--brand)">Note 03</p><h2 style="font-size:58px;margin-top:10px">Honest timelines.</h2></div>
+          </div>
+        </div>
+      </div></div><p class="cap">HOW WE WORK: NOTES ROLL THROUGH THE CENTRE</p></div>
+      <div><div class="frame sm"><div class="s dD letterbox" data-nav="solid" style="background:#070707">
+        <div class="abs" style="left:0;right:0;top:250px;text-align:center">
+          <h2 style="font-size:110px;line-height:1.05">The end of this page.<br><span style="color:var(--brand)">The start of yours.</span></h2>
+          <p class="btn" style="margin-top:46px;font-family:'Tenor Sans'">Get in touch &rarr;</p>
+          <p class="m" style="font-size:13px;color:#777;margin-top:30px">After the credits: care plans from UGX 120,000/mo</p>
+        </div>
+      </div></div><p class="cap">CLOSE: THE END CARD, AND A POST-CREDITS LINE</p></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const NAV = (solid) => `<div class="nav${solid ? " solid" : ""}"><img src="../../public/logo-mark.svg" alt=""><span class="links"><span>Home</span><span>Services</span><span>Store</span><span class="on">About</span><span>Contact</span></span><span class="cta">GET IN TOUCH</span></div>`;
+  document.querySelectorAll("[data-nav]").forEach((s) => s.insertAdjacentHTML("afterbegin", NAV(s.dataset.nav === "solid")));
+  document.querySelectorAll("[data-flap]").forEach((el) => {
+    const w = el.dataset.w, h = el.dataset.h, f = el.dataset.f;
+    const cell = (c, cls = "") => `<span class="${cls}" style="width:${w}px;height:${h}px;font-size:${f}px">${c === " " ? "&nbsp;" : c}</span>`;
+    el.innerHTML = [...el.dataset.flap].map((c) => cell(c)).join("") + (el.dataset.mid ? cell(el.dataset.mid, "mid") : "");
+  });
+</script>
+</body>
+</html>

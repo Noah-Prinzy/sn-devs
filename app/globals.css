@@ -63,6 +63,45 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 700;
 }
 
+/* Contact's own type (app/(public-pages)/contact/layout.tsx): the page's headings, labels and
+   text switch to Gloock, Martian Mono and Bricolage Grotesque. */
+.contact-type {
+  --font-heading: var(--font-gloock);
+  --font-geist-mono: var(--font-martian);
+  font-family: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
+}
+.contact-type h1, .contact-type h2, .contact-type h3 { font-weight: 400; }
+
+/* About's own type (app/(public-pages)/about/layout.tsx): Young Serif, JetBrains Mono, Onest. */
+.about-type {
+  --font-heading: var(--font-young-serif);
+  --font-geist-mono: var(--font-jetbrains);
+  font-family: var(--font-onest), ui-sans-serif, system-ui, sans-serif;
+}
+.about-type h1, .about-type h2, .about-type h3 { font-weight: 400; }
+
+/* The Contact clock's colon breathes once every two seconds (not under reduced motion). */
+@keyframes colon-breathe { 50% { opacity: 0.3; } }
+.colon-breathe { animation: colon-breathe 2s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) { .colon-breathe { animation: none; } }
+
+/* The Services drawer: a bottom sheet on phones, a side panel from md up; a fade when still.
+   Declared in @theme so Tailwind emits the keyframes wherever an animate-* class uses them. */
+@theme {
+  --animate-sheet-in: sheet-in 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+  --animate-sheet-out: sheet-out 0.25s ease-in;
+  --animate-drawer-in: drawer-in 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+  --animate-drawer-out: drawer-out 0.25s ease-in;
+  --animate-soft-in: soft-in 0.25s ease-out;
+  --animate-soft-out: soft-out 0.2s ease-in;
+  @keyframes sheet-in { from { transform: translateY(100%); } }
+  @keyframes sheet-out { to { transform: translateY(100%); } }
+  @keyframes drawer-in { from { transform: translateX(100%); } }
+  @keyframes drawer-out { to { transform: translateX(100%); } }
+  @keyframes soft-in { from { opacity: 0; } }
+  @keyframes soft-out { to { opacity: 0; } }
+}
+
 @keyframes marquee-up {
   0% {
     transform: translateY(0);
@@ -262,13 +301,6 @@ h1, h2, h3, h4, h5, h6 {
 /* Copy that scroll progress reveals (the Home welcome, the Services and Store ledes) starts
    hidden in the static HTML; without JavaScript it must simply be there (CSSWG: forcing
    reduced motion on scroll-linked animations "will sometimes make content invisible"). */
-/* The site's pause-motion switch (components/motion-pref.tsx): CSS loops stop where they are. */
-html[data-motion="paused"] *,
-html[data-motion="paused"] *::before,
-html[data-motion="paused"] *::after {
-  animation-play-state: paused !important;
-}
-
 @media (scripting: none) {
   /* ...and any reveal that Motion renders hidden in the static HTML (initial opacity 0 for
      whileInView / animate) shows at rest, since the script that would reveal it never runs. */

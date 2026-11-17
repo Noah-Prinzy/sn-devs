@@ -27,9 +27,9 @@ const out = (t: number) => 1 - Math.pow(1 - t, 3);
 export const OPENER_STOPS = [0.5, 1];
 
 const DOORS = [
-    { id: "build", title: "Build", sub: "Websites, apps & templates", src: "/assets/home/scene-build-code.jpg", tilt: -8, y: 10 },
-    { id: "care", title: "Care", sub: "Updates, upgrades & growth", src: "/assets/home/scene-care-desk.jpg", tilt: 0, y: -16 },
-    { id: "create", title: "Create", sub: "Video, decks & ads", src: "/assets/services/photos/studio-setup.jpg", tilt: 8, y: 10 },
+    { id: "build", title: "Build", sub: "Websites, apps & templates", src: "/assets/services/photos/apps-kanban-screen.jpg", tilt: -8, y: 10 },
+    { id: "care", title: "Care", sub: "Updates, upgrades & growth", src: "/assets/services/photos/care-code-night.jpg", tilt: 0, y: -16 },
+    { id: "create", title: "Create", sub: "Video, decks & ads", src: "/assets/services/photos/video-production-desk.jpg", tilt: 8, y: 10 },
 ];
 
 function Door({ d, i, p }: { d: (typeof DOORS)[number]; i: number; p: MotionValue<number> }) {

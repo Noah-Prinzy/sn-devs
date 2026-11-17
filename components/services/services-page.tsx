@@ -1,34 +1,21 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
-import { AnimatePresence, motion, useReducedMotion, useScroll, useTransform } from "motion/react";
+import { useRef } from "react";
+import { motion, useScroll, useTransform } from "motion/react";
+import { useStill } from "@/components/store/browser-frame";
 import { SiteMotion } from "@/components/site-motion";
-import { Check, ArrowRight } from "@phosphor-icons/react";
-import { Button } from "@/components/ui/button";
-import { SERVICE_GROUPS, WEBSITE_TIERS, ugx, usd } from "@/data/services";
+import { Check } from "@phosphor-icons/react";
+import { WEBSITE_TIERS, ugx } from "@/data/services";
 import { pinStops, sectionStops, useScrollAnchors } from "@/components/use-scroll-anchors";
 import { TechBubbles } from "@/components/services/tech-bubbles";
-import { ArtStage } from "@/components/services/art-stage";
+import { ServiceRows } from "@/components/services/service-rows";
 
-// A server aisle gives way to a circuit board behind a large "SERVICES"; then a switchboard:
-// every service and its starting price on the left, the picked one on the right, its art
-// on a plinth (components/services/art-stage.tsx).
+// A server aisle gives way to a circuit board behind a large "SERVICES"; then the menu, every
+// service as a row with its own drawing and a detail drawer (components/services/service-rows.tsx);
+// then the website packages.
 const CUT = "/assets/services/cutouts";
-// `rim` outlines dark art in light so it doesn't vanish into the black page.
-const ART: Record<string, { src: string; w: number; h: number; rim?: boolean }> = {
-    launch: { src: `${CUT}/laptop.png`, w: 1331, h: 987 },
-    websites: { src: `${CUT}/devices.png`, w: 1295, h: 1344 },
-    apps: { src: `${CUT}/apps.png`, w: 553, h: 490 },
-    templates: { src: `${CUT}/templates.png`, w: 732, h: 616 },
-    "care-plans": { src: `${CUT}/care-plans.png`, w: 957, h: 808 },
-    upgrades: { src: `${CUT}/upgrades.png`, w: 913, h: 852 },
-    video: { src: `${CUT}/video-setup.png`, w: 736, h: 791, rim: true },
-    decks: { src: `${CUT}/decks.png`, w: 556, h: 586 },
-    ads: { src: `${CUT}/ads-social.png`, w: 725, h: 727 },
-};
-const ALL = SERVICE_GROUPS.flatMap((g) => g.services);
+
 export function ServicesPage() {
     const hero = useRef<HTMLElement>(null);
     const board = useRef<HTMLElement>(null);
@@ -47,23 +34,12 @@ export function ServicesPage() {
     const word = useTransform(scrollYProgress, (v) => 0.8 + 0.18 * span(v, 0, 1));
     // What we sell is readable on the fold: the lede arrives in the first third of the pin.
     const lede = useTransform(scrollYProgress, (v) => span(v, 0.1, 0.35));
-    const reduce = useReducedMotion();
+    // useStill: OS reduced motion read the same on server and client (no hydration mismatch).
+    const reduce = useStill();
 
-    // Anchors: the opener pin (start and end), the switchboard top (the list itself scrolls free)
+    // Anchors: the opener pin (start and end), the menu top (the rows scroll free)
     // and the packages scene. The footer is left alone.
     useScrollAnchors(() => [...pinStops(hero.current, [0, 1]), ...sectionStops([board, packages])]);
-
-    // Cycle through the services until the visitor reaches for the list themselves.
-    const [active, setActive] = useState(ALL[1].id);
-    const [touched, setTouched] = useState(false);
-    useEffect(() => {
-        // On phones the detail opens inline under the tapped row, so the list must not move on its own.
-        if (touched || reduce || window.matchMedia("(max-width: 767px)").matches) return;
-        const t = setInterval(() => setActive((id) => ALL[(ALL.findIndex((s) => s.id === id) + 1) % ALL.length].id), 3200);
-        return () => clearInterval(t);
-    }, [touched, reduce]);
-    const svc = ALL.find((s) => s.id === active)!;
-    const art = ART[svc.id];
 
     return (
         <SiteMotion>
@@ -94,71 +70,7 @@ export function ServicesPage() {
                     </div>
                 </section>
 
-                <section ref={board} className="mx-auto grid min-h-svh max-w-7xl items-center gap-12 px-4 py-24 md:grid-cols-[1fr_1.05fr] md:px-6" aria-label="All services and prices">
-                    <div onPointerEnter={() => setTouched(true)} onFocusCapture={() => setTouched(true)}>
-                        {SERVICE_GROUPS.map((g) => (
-                            <div key={g.id} className="mb-7">
-                                <h2 className="mb-2 text-xs uppercase tracking-[.3em] text-neutral-400">{g.index} · {g.name}</h2>
-                                {g.services.map((s) => (
-                                    <div key={s.id}>
-                                    <button
-                                        aria-pressed={active === s.id}
-                                        onMouseEnter={() => setActive(s.id)}
-                                        onFocus={() => setActive(s.id)}
-                                        onClick={() => setActive(s.id)}
-                                        className={`flex w-full items-baseline justify-between gap-4 border-b border-white/10 py-3 text-left transition-colors outline-none focus-visible:ring-2 focus-visible:ring-(--brand) focus-visible:ring-offset-4 focus-visible:ring-offset-[#0a0a0a] ${active === s.id ? "text-white" : "text-neutral-400 hover:text-neutral-200"}`}
-                                    >
-                                        <span className="flex items-baseline gap-3 font-heading text-2xl md:text-[1.7rem]">
-                                            <span className={`size-2 shrink-0 -translate-y-1 rounded-full transition-all ${active === s.id ? "bg-(--brand) shadow-[0_0_12px_var(--brand)]" : "bg-white/10"}`} />
-                                            {s.name}
-                                        </span>
-                                        <span className={`shrink-0 text-sm tabular-nums ${active === s.id ? "text-(--brand)" : ""}`}>from {ugx(s.from)}</span>
-                                    </button>
-                                    {active === s.id && (
-                                        <div className="flex flex-col gap-4 border-b border-white/10 py-5 min-[400px]:flex-row md:hidden">
-                                            <ArtStage variant="plinth" id={s.id} art={ART[s.id]} size="sm" className="size-24 shrink-0" />
-                                            <div className="min-w-0">
-                                                <p className="font-heading text-2xl text-(--brand)">{ugx(s.from)} <span className="text-xs font-normal text-neutral-400">{s.unit ?? "from"} · {usd(s.from)}</span></p>
-                                                <p className="mt-1 text-sm text-neutral-400">{s.blurb} · {s.delivery}</p>
-                                                <ul className="mt-3 space-y-1.5">
-                                                    {s.includes.map((i) => <li key={i} className="flex gap-2 text-sm text-neutral-200"><Check className="mt-0.5 size-4 shrink-0 text-(--brand)" />{i}</li>)}
-                                                </ul>
-                                                <Button asChild size="sm" className="mt-4 h-11">
-                                                    <Link href={`/contact?service=${s.id}`}>{s.quote ? "Get a quote" : "Start this project"} <ArrowRight /></Link>
-                                                </Button>
-                                            </div>
-                                        </div>
-                                    )}
-                                    </div>
-                                ))}
-                            </div>
-                        ))}
-                    </div>
-
-                    <div className="hidden flex-col items-center md:sticky md:top-24 md:flex">
-                        <ArtStage variant="plinth" id={svc.id} art={art} className="size-[min(360px,42vh,80vw)]" />
-                        <AnimatePresence mode="wait">
-                            <motion.div key={svc.id} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.3 }} className="relative z-10 mt-8 w-full max-w-md">
-                                <div className="flex items-end justify-between gap-4">
-                                    <h3 className="font-heading text-3xl">{svc.name}</h3>
-                                    <p className="shrink-0 text-right font-heading text-3xl text-(--brand)">
-                                        {ugx(svc.from)}
-                                        <span className="block text-xs font-normal text-neutral-400">{svc.unit ?? "from"} · {usd(svc.from)}</span>
-                                    </p>
-                                </div>
-                                <p className="mt-2 text-neutral-400">{svc.blurb} · {svc.delivery}</p>
-                                <ul className="mt-5 grid grid-cols-2 gap-2">
-                                    {svc.includes.map((i) => (
-                                        <li key={i} className="flex gap-2 text-sm text-neutral-200"><Check className="mt-0.5 size-4 shrink-0 text-(--brand)" />{i}</li>
-                                    ))}
-                                </ul>
-                                <Button asChild className="mt-6">
-                                    <Link href={`/contact?service=${svc.id}`}>{svc.quote ? "Get a quote" : "Start this project"} <ArrowRight /></Link>
-                                </Button>
-                            </motion.div>
-                        </AnimatePresence>
-                    </div>
-                </section>
+                <ServiceRows sectionRef={board} />
 
                 <section ref={packages} className="relative flex min-h-svh items-center overflow-hidden bg-(--brand) px-4 py-28 text-(--brand-fg) md:px-6" aria-labelledby="packages-title">
                     <Image src={`${CUT}/devices.png`} alt="" width={1295} height={1344} sizes="34vw" className="pointer-events-none absolute -top-24 right-[4vw] hidden h-auto w-[34vw] max-w-130 rotate-[-8deg] drop-shadow-[0_40px_50px_rgba(0,0,0,.35)] md:block" />

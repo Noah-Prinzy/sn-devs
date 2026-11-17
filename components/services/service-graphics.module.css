@@ -1,0 +1,273 @@
+/* Services menu art (design/services/menu-graphics-options.html, G4 "drawn live").
+   A drawing sits in quiet grey; when its row is hovered or keyboard-focused (or the drawer
+   opens) it plays its one action once and settles. Under reduced motion every drawing simply
+   shows its end frame. Kept in a module so the keyframes are never pruned and stay local. */
+
+.d {
+    --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+    --base: 0.35s;
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+.drawer {
+    --base: 0.45s;
+}
+
+/* ---- the pieces ---- */
+.w {
+    fill: none;
+    stroke: #6b6b6b;
+    stroke-width: 1.25;
+    stroke-linecap: square;
+    vector-effect: non-scaling-stroke;
+    transition: stroke 0.4s;
+}
+.drawer .w {
+    stroke: #a3a3a3;
+}
+.old * {
+    fill: none;
+    stroke: #4f4f4f;
+    stroke-width: 1.25;
+    stroke-dasharray: 3 3;
+    vector-effect: non-scaling-stroke;
+}
+.f {
+    fill: rgb(255 255 255 / 0.11);
+}
+.a {
+    fill: none;
+    stroke: #4ade80;
+    stroke-width: 1.5;
+    vector-effect: non-scaling-stroke;
+}
+.solid {
+    fill: #4ade80;
+    stroke: none;
+}
+.t {
+    font: 600 7px var(--font-mono), monospace;
+    letter-spacing: 0.12em;
+    fill: #8a8a8a;
+}
+.sel {
+    fill: #0d0d0d;
+    stroke: #6b6b6b;
+    stroke-width: 1.25;
+    vector-effect: non-scaling-stroke;
+    transition: stroke 0.4s;
+}
+
+/* Animated parts, in their resting (first) frame. */
+.line {
+    fill: none;
+    stroke: #4ade80;
+    stroke-width: 2.2;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    --dur: 0.8s;
+}
+.drawer .line {
+    stroke-width: 1.4;
+}
+.pulse {
+    --dur: 0.9s;
+    --tf: linear;
+}
+.cta {
+    fill: #4ade80;
+    transform-box: fill-box;
+    transform-origin: left;
+    transform: scaleX(0);
+    --dur: 0.45s;
+}
+.site {
+    fill: #4ade80;
+    opacity: 0.25;
+    --dur: 0.3s;
+}
+.lift {
+}
+.divider {
+    transform: translateX(-96px);
+    --dur: 0.8s;
+}
+.head {
+    transform: translateX(-140px);
+    --dur: 0.9s;
+    --tf: cubic-bezier(0.3, 0.1, 0.3, 1);
+}
+.pick {
+    transform: translateY(-28px);
+    --dur: 0.45s;
+}
+.bar {
+    fill: rgb(74 222 128 / 0.2);
+    transform-box: fill-box;
+    transform-origin: bottom;
+    transform: scaleY(0.2);
+    --o: 0.25s;
+}
+
+/* ---- play: row hover / keyboard focus, or the drawer opening ---- */
+.trigger:hover .live .play,
+.trigger:focus-visible .live .play,
+.drawer.live .play {
+    animation-duration: var(--dur, 0.6s);
+    animation-timing-function: var(--tf, var(--ease));
+    animation-delay: calc(var(--base) + var(--o, 0s));
+    animation-fill-mode: both;
+}
+.trigger:hover .live .line,
+.trigger:focus-visible .live .line,
+.drawer.live .line {
+    animation-name: dash;
+}
+.trigger:hover .live .cta,
+.trigger:focus-visible .live .cta,
+.drawer.live .cta {
+    animation-name: sx;
+}
+.trigger:hover .live .site,
+.trigger:focus-visible .live .site,
+.drawer.live .site {
+    animation-name: op;
+}
+.trigger:hover .live .lift,
+.trigger:focus-visible .live .lift,
+.drawer.live .lift {
+    animation-name: lift;
+}
+.trigger:hover .live .divider,
+.trigger:focus-visible .live .divider,
+.drawer.live .divider {
+    animation-name: slide;
+}
+.trigger:hover .live .head,
+.trigger:focus-visible .live .head,
+.drawer.live .head {
+    animation-name: slide;
+}
+.trigger:hover .live .pick,
+.trigger:focus-visible .live .pick,
+.drawer.live .pick {
+    animation-name: slide;
+}
+.trigger:hover .live .bar,
+.trigger:focus-visible .live .bar,
+.drawer.live .bar {
+    animation-name: sy;
+}
+.trigger:hover .w,
+.trigger:focus-visible .w {
+    stroke: #bdbdbd;
+}
+.trigger:hover .sel,
+.trigger:focus-visible .sel,
+.drawer .sel {
+    stroke: #4ade80;
+}
+
+/* ---- still (reduced motion): the end frame, no keyframes ---- */
+.still .line {
+    stroke-dashoffset: 0;
+}
+.still .cta,
+.still .divider,
+.still .head,
+.still .pick,
+.still .bar {
+    transform: none;
+}
+.still .site {
+    opacity: 1;
+}
+.still .lift {
+    transform: translateY(-6px);
+}
+.still .sel {
+    stroke: #4ade80;
+}
+
+/* ---- the row's bottom rule, drawn toward the drawing ---- */
+.rule {
+    position: absolute;
+    left: 0;
+    right: 4rem;
+    bottom: 0;
+    height: 1px;
+    background: #4ade80;
+    transform: scaleX(0);
+    transform-origin: left;
+    pointer-events: none;
+}
+.trigger:hover .rule,
+.trigger:focus-visible .rule {
+    animation: grow 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+.trigger:hover .ruleStill,
+.trigger:focus-visible .ruleStill {
+    animation: none;
+    transform: none;
+}
+
+/* ---- the drawer's blueprint panel ---- */
+.panel {
+    background-color: #0b0f0c;
+    background-image:
+        repeating-linear-gradient(0deg, rgb(74 222 128 / 0.05) 0 1px, transparent 1px 24px),
+        repeating-linear-gradient(90deg, rgb(74 222 128 / 0.05) 0 1px, transparent 1px 24px);
+}
+
+/* ---- phone icons ---- */
+.icon {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    stroke-linecap: square;
+    stroke-linejoin: miter;
+}
+.icon * {
+    vector-effect: non-scaling-stroke;
+}
+.k {
+    fill: #151515;
+}
+
+@keyframes dash {
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+@keyframes sx {
+    to {
+        transform: scaleX(1);
+    }
+}
+@keyframes sy {
+    to {
+        transform: scaleY(1);
+    }
+}
+@keyframes op {
+    to {
+        opacity: 1;
+    }
+}
+@keyframes lift {
+    to {
+        transform: translateY(-6px);
+    }
+}
+@keyframes slide {
+    to {
+        transform: none;
+    }
+}
+@keyframes grow {
+    to {
+        transform: scaleX(1);
+    }
+}

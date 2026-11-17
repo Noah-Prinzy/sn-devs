@@ -1,0 +1,366 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>About remake: directions</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700&family=Geist+Mono:wght@400;600&family=Playfair+Display:wght@400&family=Gloock&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600&family=Martian+Mono:wght@400;500&family=Brygada+1918:ital,wght@0,400;0,600;1,400;1,600&family=Familjen+Grotesk:wght@400;600&family=Azeret+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;1,6..72,400&family=Schibsted+Grotesk:wght@400;600&family=Fragment+Mono&family=Syne:wght@500;700;800&family=Hanken+Grotesk:wght@400;600&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root { --brand: #4ade80; --fg: #04130a; }
+  * { box-sizing: border-box; margin: 0; }
+  body { background: #161616; padding: 24px; font-family: "Playfair Display", serif; color: #eee; width: 1600px; }
+  .sheet-title { font: 700 30px "Roboto Slab", serif; margin-bottom: 4px; }
+  .sheet-sub { font: 12px "Geist Mono", monospace; color: #888; letter-spacing: .12em; margin-bottom: 26px; }
+  .row { display: grid; grid-template-columns: 232px 1294px; gap: 14px; margin-bottom: 40px; align-items: start; padding-bottom: 36px; border-bottom: 1px solid #262626; }
+  .label b { display: inline-block; background: var(--brand); color: #000; font: 700 22px "Geist Mono", monospace; padding: 2px 10px; }
+  .label h3 { font: 700 21px "Roboto Slab", serif; margin: 10px 0 8px; }
+  .label p { font-size: 13px; line-height: 1.45; color: #bbb; margin-bottom: 9px; }
+  .label .k { font: 600 10.5px "Geist Mono", monospace; letter-spacing: .14em; color: #888; text-transform: uppercase; margin: 12px 0 4px; }
+  .label .fonts { font-size: 12.5px; color: #ddd; line-height: 1.5; }
+  .label .pick { display: inline-block; color: var(--fg); background: var(--brand); font: 700 12px "Geist Mono", monospace; letter-spacing: .2em; padding: 5px 9px; margin-top: 12px; }
+  .frames { display: grid; gap: 14px; }
+  .top { display: grid; grid-template-columns: 640px 640px; gap: 14px; }
+  .bot { display: grid; grid-template-columns: 422px 422px 422px; gap: 14px; }
+  .frame { width: 640px; height: 400px; overflow: hidden; position: relative; background: #0a0a0a; border: 1px solid #333; }
+  .frame.sm { width: 422px; height: 264px; }
+  .frame > .s { width: 1440px; height: 900px; transform: scale(.4444); transform-origin: 0 0; position: absolute; inset: 0; background: #0a0a0a; overflow: hidden; }
+  .frame.sm > .s { transform: scale(.29306); }
+  .cap { font: 11px "Geist Mono", monospace; color: #888; margin-top: 6px; letter-spacing: .1em; text-transform: uppercase; }
+  .cap em { color: var(--brand); font-style: normal; }
+
+  /* site nav, as on the live pages */
+  .nav { position: absolute; top: 0; left: 0; right: 0; height: 84px; display: flex; align-items: center; padding: 0 28px; z-index: 20; background: linear-gradient(#0a0a0abf, transparent); }
+  .nav.solid { background: rgba(10,10,10,.88); }
+  .nav img { height: 30px; }
+  .nav .links { position: absolute; left: 50%; transform: translateX(-50%); display: flex; gap: 36px; font: 15px "Playfair Display"; color: #ddd; }
+  .nav .links .on { color: var(--brand); border-bottom: 1px solid var(--brand); padding-bottom: 4px; }
+  .nav .cta { margin-left: auto; background: var(--brand); color: var(--fg); font: 13px "Playfair Display"; letter-spacing: .15em; padding: 11px 16px; }
+  .nav .pause { margin-left: auto; margin-right: 34px; width: 14px; height: 15px; border-left: 5px solid #ddd; border-right: 5px solid #ddd; }
+  .nav .pause + .cta { margin-left: 0; }
+  .prog { position: absolute; left: 0; top: 83px; height: 2px; background: var(--brand); z-index: 21; }
+
+  .fill { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .abs { position: absolute; }
+  .hint { position: absolute; left: 0; right: 0; bottom: 70px; text-align: center; font: 700 17px "Roboto Slab"; letter-spacing: .3em; color: #fff; }
+  .hint::after { content: ""; display: block; width: 5px; height: 5px; background: var(--brand); margin: 14px auto 0; }
+  .panel { background: linear-gradient(180deg,#262626 0%,#1a1a1a 55%,#121212 100%); overflow: hidden; position: absolute; }
+  .panel::before { content: ""; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 38%, rgba(74,222,128,.16), transparent 62%); }
+  .panel img { position: absolute; left: 50%; transform: translateX(-50%); top: 8%; filter: drop-shadow(0 0 40px rgba(0,0,0,.6)); }
+  .panel::after { content: ""; position: absolute; inset: auto 0 0 0; height: 30%; background: linear-gradient(transparent, #121212); }
+  .stamp { position: absolute; z-index: 3; font: 500 13px "Martian Mono"; letter-spacing: .2em; color: #ddd; background: rgba(10,10,10,.75); border: 1px dashed #777; padding: 6px 10px; }
+  .btn { display: inline-block; background: var(--brand); color: var(--fg); padding: 22px 30px; font-size: 20px; }
+
+  /* 01 two desks: Gloock / Bricolage Grotesque / Martian Mono */
+  .d1 { font-family: "Bricolage Grotesque"; }
+  .d1 h1, .d1 h2, .d1 .h { font-family: "Gloock", serif; font-weight: 400; letter-spacing: -.01em; }
+  .d1 .m { font: 500 15px "Martian Mono", monospace; letter-spacing: .3em; text-transform: uppercase; }
+  /* 02 two lines: Brygada 1918 / Familjen Grotesk / Azeret Mono */
+  .d2 { font-family: "Familjen Grotesk"; }
+  .d2 h1, .d2 h2, .d2 .h { font-family: "Brygada 1918", serif; font-weight: 400; }
+  .d2 .m { font: 500 15px "Azeret Mono", monospace; letter-spacing: .28em; text-transform: uppercase; }
+  /* 03 pin: Newsreader / Schibsted Grotesk / Fragment Mono */
+  .d3 { font-family: "Schibsted Grotesk"; }
+  .d3 h1, .d3 h2, .d3 .h { font-family: "Newsreader", serif; font-weight: 400; letter-spacing: -.015em; }
+  .d3 .m { font: 15px "Fragment Mono", monospace; letter-spacing: .26em; text-transform: uppercase; }
+  /* 04 file: Syne / Hanken Grotesk / Spline Sans Mono */
+  .d4 { font-family: "Hanken Grotesk"; }
+  .d4 h1, .d4 h2, .d4 .h { font-family: "Syne", sans-serif; font-weight: 700; letter-spacing: -.02em; }
+  .d4 .m { font: 500 15px "Spline Sans Mono", monospace; letter-spacing: .24em; text-transform: uppercase; }
+  .grid-bg { background-image: linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px); background-size: 48px 48px; }
+  .field { display: grid; grid-template-columns: 210px 1fr 30px; align-items: end; padding: 16px 0 12px; border-bottom: 1px solid rgba(255,255,255,.18); font-size: 22px; }
+  .field .m { font-size: 13px; color: #888; }
+  .field.done { border-bottom-color: rgba(74,222,128,.6); }
+  .field .ok { color: var(--brand); font: 18px "Spline Sans Mono"; text-align: right; }
+  .caret { display: inline-block; width: 12px; height: 26px; background: var(--brand); vertical-align: -4px; margin-left: 4px; }
+</style>
+</head>
+<body>
+
+<p class="sheet-title">About, remade: four directions</p>
+<p class="sheet-sub">KAISER · 2026-11-17 · EACH ROW = ONE WHOLE PAGE: OPENER AT REST, OPENER AFTER SCROLL, THEN WHO WE ARE → HOW WE WORK → CLOSE. FRAMES ARE 1440×900, SCALED.</p>
+
+<!-- ============ 01 TWO DESKS ============ -->
+<div class="row">
+  <div class="label"><b>01</b><h3>Two desks</h3>
+    <p>Opens on a calm, dark photo of the studio: two desks, nobody at them. Headline left, nothing else moving.</p>
+    <p>Scrolling pushes the camera in slowly and dims it; a name pins to each desk (Shaun left, Noah right). Each pin then drops into its own portrait panel below. The manifesto line and the four promises light up one at a time. The close goes back to the desks, with the Kampala clock from Contact.</p>
+    <p class="k">Fonts</p><p class="fonts">Contact set: Gloock, Bricolage Grotesque, Martian Mono</p>
+    <p class="k">Needs</p><p class="fonts">1 stock photo: two empty desks side by side in a dim studio at night, two screens glowing, no people (Unsplash/Pexels). Stand-in shown.</p>
+    <p class="pick">KAISER PICK</p></div>
+  <div class="frames">
+    <div class="top">
+      <div><div class="frame"><div class="s d1" data-nav>
+        <img class="fill" src="../../public/assets/home/scene-care-desk.jpg" style="filter:brightness(.62);object-position:60% 50%">
+        <div class="abs" style="inset:0;background:linear-gradient(90deg,rgba(10,10,10,.9) 0%,rgba(10,10,10,.55) 45%,rgba(10,10,10,.05) 80%)"></div>
+        <div class="abs" style="left:120px;top:250px;width:760px">
+          <p class="m" style="color:var(--brand)">About · Shaun &amp; Noah</p>
+          <h1 style="font-size:116px;line-height:.98;margin-top:28px">We build it.<br>We keep it <span style="color:var(--brand)">running.</span></h1>
+          <p style="font-size:22px;line-height:1.5;color:#c8c8c8;margin-top:34px;max-width:560px">A two-person web and creative studio in Kampala. Nine services, one small team, clear prices.</p>
+        </div>
+        <p class="hint">SCROLL</p>
+      </div></div><p class="cap">AT REST <em>(PHOTO IS A STAND-IN)</em></p></div>
+      <div><div class="frame"><div class="s d1" data-nav="solid">
+        <img class="fill" src="../../public/assets/home/scene-care-desk.jpg" style="filter:brightness(.4);transform:scale(1.2);transform-origin:62% 58%;object-position:60% 50%">
+        <div class="abs" style="inset:0;background:linear-gradient(180deg,rgba(10,10,10,.75),transparent 40%)"></div>
+        <h2 class="abs" style="left:120px;top:150px;font-size:64px;line-height:1.05">Two desks. Two people.<br><span style="color:var(--brand)">No middle layer.</span></h2>
+        <svg class="abs" width="1440" height="900" style="inset:0">
+          <line x1="430" y1="640" x2="430" y2="470" stroke="#4ade80" stroke-width="2"/><rect x="424" y="634" width="12" height="12" fill="#4ade80"/><circle cx="430" cy="640" r="26" fill="#4ade80" opacity=".16"/>
+          <line x1="1050" y1="560" x2="1050" y2="390" stroke="#4ade80" stroke-width="2"/><rect x="1044" y="554" width="12" height="12" fill="#4ade80"/><circle cx="1050" cy="560" r="26" fill="#4ade80" opacity=".16"/>
+        </svg>
+        <div class="abs" style="left:446px;top:420px;background:rgba(10,10,10,.82);padding:14px 18px;border-left:2px solid var(--brand)"><p class="m" style="font-size:13px;color:var(--brand)">01 · Shaun</p><p style="font-size:20px;margin-top:6px">Design &amp; the creative studio</p></div>
+        <div class="abs" style="left:1066px;top:340px;background:rgba(10,10,10,.82);padding:14px 18px;border-left:2px solid var(--brand)"><p class="m" style="font-size:13px;color:var(--brand)">02 · Noah</p><p style="font-size:20px;margin-top:6px">Engineering &amp; care</p></div>
+      </div></div><p class="cap">AFTER SCROLL: SLOW PUSH-IN, A NAME PINS TO EACH DESK</p></div>
+    </div>
+    <div class="bot">
+      <div><div class="frame sm"><div class="s d1" data-nav="solid">
+        <p class="m abs" style="left:120px;top:150px;color:#999">01 · Who we are</p>
+        <svg class="abs" width="1440" height="900" style="inset:0"><line x1="400" y1="84" x2="400" y2="200" stroke="#4ade80" stroke-width="2" stroke-dasharray="3 7"/><line x1="1040" y1="84" x2="1040" y2="200" stroke="#4ade80" stroke-width="2" stroke-dasharray="3 7"/></svg>
+        <div class="panel" style="left:120px;top:210px;width:560px;height:430px"><img src="../../public/assets/home/people/shaun-placeholder.webp" style="width:44%"></div>
+        <div class="panel" style="left:760px;top:210px;width:560px;height:430px"><img src="../../public/assets/home/people/noah-placeholder.webp" style="width:50%"></div>
+        <div class="abs" style="left:120px;top:668px;width:560px"><h2 style="font-size:72px;line-height:1">Shaun</h2><p style="font-size:21px;color:#bbb;margin-top:14px;line-height:1.45">Leads design and the creative studio: UI, video, presentations and ad creative.</p></div>
+        <div class="abs" style="left:760px;top:668px;width:560px"><h2 style="font-size:72px;line-height:1">Noah</h2><p style="font-size:21px;color:#bbb;margin-top:14px;line-height:1.45">Leads engineering: web apps, custom systems, care plans and upgrades.</p></div>
+      </div></div><p class="cap">WHO WE ARE: THE PINS DROP INTO TWO PORTRAITS</p></div>
+      <div><div class="frame sm"><div class="s d1" data-nav="solid">
+        <p class="m abs" style="left:120px;top:160px;color:#999">02 · How we work</p>
+        <h2 class="abs" style="left:120px;top:220px;width:620px;font-size:54px;line-height:1.14">A website should not be something you buy once and then worry about. It should work for you every day <span style="color:var(--brand)">and get better.</span></h2>
+        <div class="abs" style="left:840px;top:220px;width:480px;display:grid;gap:22px">
+          <div style="border-top:2px solid var(--brand);padding-top:16px"><p class="h" style="font-size:40px;color:var(--brand)">01</p><p style="font-size:26px;margin-top:4px">Fixed quote first</p><p style="font-size:18px;color:#999;margin-top:4px">Price agreed before a line is written.</p></div>
+          <div style="border-top:2px solid var(--brand);padding-top:16px"><p class="h" style="font-size:40px;color:var(--brand)">02</p><p style="font-size:26px;margin-top:4px">Talk to the builders</p><p style="font-size:18px;color:#999;margin-top:4px">Two people, direct line.</p></div>
+          <div style="border-top:1px solid #333;padding-top:16px;opacity:.35"><p class="h" style="font-size:40px">03</p><p style="font-size:26px;margin-top:4px">Fast, honest timelines</p></div>
+          <div style="border-top:1px solid #333;padding-top:16px;opacity:.2"><p class="h" style="font-size:40px">04</p><p style="font-size:26px;margin-top:4px">We stay on</p></div>
+        </div>
+      </div></div><p class="cap">HOW WE WORK: PROMISES LIGHT UP ONE BY ONE</p></div>
+      <div><div class="frame sm"><div class="s d1" data-nav="solid">
+        <img class="fill" src="../../public/assets/home/scene-care-desk.jpg" style="filter:brightness(.3);object-position:60% 50%">
+        <div class="abs" style="left:120px;top:300px"><p class="m" style="color:var(--brand)">Your turn</p><h2 style="font-size:130px;line-height:1;margin-top:24px">Let's build <span style="color:var(--brand)">yours.</span></h2><p class="btn" style="margin-top:50px;font-family:'Bricolage Grotesque'">Get in touch &rarr;</p></div>
+        <div class="abs" style="right:120px;top:560px;text-align:right"><p style="font:300 110px 'Martian Mono';letter-spacing:-.04em">16:26</p><p class="m" style="font-size:14px;color:#ccc;margin-top:6px">EAT · reply within a day</p></div>
+      </div></div><p class="cap">CLOSE: BACK AT THE DESKS, CLOCK FROM CONTACT</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 02 TWO LINES, ONE STUDIO ============ -->
+<div class="row">
+  <div class="label"><b>02</b><h3>Two lines, one studio</h3>
+    <p>No photo. Two thin green lines come in from the left and right edges, labelled Shaun and Noah, and stop short of the middle.</p>
+    <p>Scrolling draws them together; they meet under the headline, become one line with the SN mark at the join, and that one line runs down the whole page as the guide. It branches out to each portrait, turns into a four-step timeline (the node it has reached glows), and ends at the Get in touch button.</p>
+    <p class="k">Fonts</p><p class="fonts">Brygada 1918, Familjen Grotesk, Azeret Mono</p>
+    <p class="k">Needs</p><p class="fonts">No new photos.</p></div>
+  <div class="frames">
+    <div class="top">
+      <div><div class="frame"><div class="s d2" data-nav style="background:radial-gradient(ellipse at 50% 70%,#101a13,#0a0a0a 60%)">
+        <div class="abs" style="left:0;right:0;top:200px;text-align:center">
+          <p class="m" style="color:var(--brand)">About · Kampala</p>
+          <h1 style="font-size:120px;line-height:1;margin-top:26px">Two people.<br><i style="color:var(--brand)">One studio.</i></h1>
+          <p style="font-size:22px;color:#aaa;margin-top:30px">A web and creative studio, run by the two people who build your site.</p>
+        </div>
+        <svg class="abs" width="1440" height="900" style="inset:0">
+          <line x1="0" y1="690" x2="500" y2="690" stroke="#4ade80" stroke-width="2"/><rect x="494" y="684" width="12" height="12" fill="#4ade80"/><circle cx="500" cy="690" r="22" fill="#4ade80" opacity=".16"/>
+          <line x1="1440" y1="690" x2="940" y2="690" stroke="#4ade80" stroke-width="2"/><rect x="934" y="684" width="12" height="12" fill="#4ade80"/><circle cx="940" cy="690" r="22" fill="#4ade80" opacity=".16"/>
+          <line x1="520" y1="690" x2="920" y2="690" stroke="#4ade80" stroke-width="1.5" stroke-dasharray="3 9" opacity=".3"/>
+        </svg>
+        <p class="m abs" style="left:300px;top:720px;font-size:13px;color:#ccc">Shaun · design</p>
+        <p class="m abs" style="left:950px;top:720px;font-size:13px;color:#ccc">Noah · code</p>
+      </div></div><p class="cap">AT REST</p></div>
+      <div><div class="frame"><div class="s d2" data-nav="solid">
+        <svg class="abs" width="1440" height="900" style="inset:0">
+          <path d="M0 250 L520 250 C640 250 720 300 720 400" fill="none" stroke="#4ade80" stroke-width="2"/>
+          <path d="M1440 250 L920 250 C800 250 720 300 720 400" fill="none" stroke="#4ade80" stroke-width="2"/>
+          <line x1="720" y1="460" x2="720" y2="900" stroke="#4ade80" stroke-width="2"/>
+          <circle cx="720" cy="430" r="44" fill="#4ade80" opacity=".12"/>
+        </svg>
+        <div class="abs" style="left:690px;top:400px;width:60px;height:60px;border:2px solid var(--brand);background:#0a0a0a;display:grid;place-items:center"><img src="../../public/logo-mark.svg" style="width:38px"></div>
+        <h2 class="abs" style="left:120px;top:140px;font-size:46px">Shaun <i style="color:var(--brand)">designs.</i></h2>
+        <h2 class="abs" style="right:120px;top:140px;font-size:46px;text-align:right">Noah <i style="color:var(--brand)">engineers.</i></h2>
+        <div class="abs" style="left:0;right:0;top:530px;display:grid;grid-template-columns:1fr 1fr;gap:120px;padding:0 160px">
+          <p style="font-size:24px;line-height:1.5;color:#ccc;text-align:right">You talk to both of them, from the first message to launch day.</p>
+          <p style="font-size:24px;line-height:1.5;color:#ccc">Nine services, one small team, a fixed price before any work starts.</p>
+        </div>
+      </div></div><p class="cap">AFTER SCROLL: THE LINES MEET AND BECOME ONE GUIDE</p></div>
+    </div>
+    <div class="bot">
+      <div><div class="frame sm"><div class="s d2" data-nav="solid">
+        <svg class="abs" width="1440" height="900" style="inset:0">
+          <line x1="720" y1="84" x2="720" y2="900" stroke="#4ade80" stroke-width="2"/>
+          <path d="M720 300 L600 300" stroke="#4ade80" stroke-width="2"/><path d="M720 300 L840 300" stroke="#4ade80" stroke-width="2"/>
+          <rect x="713" y="293" width="14" height="14" fill="#4ade80"/>
+        </svg>
+        <div class="panel" style="left:180px;top:170px;width:420px;height:470px"><img src="../../public/assets/home/people/shaun-placeholder.webp" style="width:52%"></div>
+        <div class="panel" style="left:840px;top:170px;width:420px;height:470px"><img src="../../public/assets/home/people/noah-placeholder.webp" style="width:58%"></div>
+        <div class="abs" style="left:180px;top:670px;width:420px"><h2 style="font-size:60px">Shaun</h2><p style="font-size:20px;color:#bbb;margin-top:8px;line-height:1.4">Design lead. UI, video, presentations, ad creative.</p></div>
+        <div class="abs" style="left:840px;top:670px;width:420px"><h2 style="font-size:60px">Noah</h2><p style="font-size:20px;color:#bbb;margin-top:8px;line-height:1.4">Engineering lead. Web apps, systems, care plans.</p></div>
+      </div></div><p class="cap">WHO WE ARE: THE LINE BRANCHES TO EACH OF US</p></div>
+      <div><div class="frame sm"><div class="s d2" data-nav="solid">
+        <p class="m abs" style="left:120px;top:160px;color:#999">How we work</p>
+        <h2 class="abs" style="left:120px;top:210px;font-size:64px">Four promises, <i style="color:var(--brand)">in order.</i></h2>
+        <svg class="abs" width="1440" height="900" style="inset:0">
+          <line x1="0" y1="440" x2="960" y2="440" stroke="#4ade80" stroke-width="2"/><line x1="960" y1="440" x2="1440" y2="440" stroke="#4ade80" stroke-width="1.5" stroke-dasharray="3 9" opacity=".35"/>
+          <rect x="154" y="428" width="24" height="24" fill="#4ade80"/><rect x="464" y="428" width="24" height="24" fill="#4ade80"/>
+          <rect x="774" y="428" width="24" height="24" fill="#0a0a0a" stroke="#4ade80" stroke-width="2"/><circle cx="960" cy="440" r="7" fill="#4ade80"/><circle cx="960" cy="440" r="24" fill="#4ade80" opacity=".18"/>
+          <rect x="1084" y="428" width="24" height="24" fill="#0a0a0a" stroke="#555" stroke-width="2"/>
+        </svg>
+        <div class="abs" style="left:120px;top:500px;display:grid;grid-template-columns:repeat(4,290px);gap:20px">
+          <div><p class="m" style="font-size:14px;color:var(--brand)">01</p><p style="font-size:28px;margin-top:10px">Fixed quote first</p><p style="font-size:19px;color:#999;margin-top:8px">Price agreed before a line is written.</p></div>
+          <div><p class="m" style="font-size:14px;color:var(--brand)">02</p><p style="font-size:28px;margin-top:10px">Talk to the builders</p><p style="font-size:19px;color:#999;margin-top:8px">No middle layer.</p></div>
+          <div style="opacity:.7"><p class="m" style="font-size:14px;color:var(--brand)">03</p><p style="font-size:28px;margin-top:10px">Honest timelines</p><p style="font-size:19px;color:#999;margin-top:8px">Launch pages in about a week; sites in two to three.</p></div>
+          <div style="opacity:.3"><p class="m" style="font-size:14px">04</p><p style="font-size:28px;margin-top:10px">We stay on</p><p style="font-size:19px;color:#999;margin-top:8px">Care plans from UGX 120,000/mo.</p></div>
+        </div>
+      </div></div><p class="cap">HOW WE WORK: THE LINE TURNS INTO A TIMELINE</p></div>
+      <div><div class="frame sm"><div class="s d2" data-nav="solid">
+        <svg class="abs" width="1440" height="900" style="inset:0"><line x1="720" y1="84" x2="720" y2="560" stroke="#4ade80" stroke-width="2"/></svg>
+        <div class="abs" style="left:0;right:0;top:180px;text-align:center"><h2 style="font-size:130px;line-height:1;background:#0a0a0a;display:inline-block;padding:0 30px">Let's build <i style="color:var(--brand)">yours.</i></h2></div>
+        <div class="abs" style="left:0;right:0;top:560px;text-align:center"><p class="btn" style="font-family:'Familjen Grotesk';font-size:24px;padding:26px 40px">Get in touch &rarr;</p><p class="m" style="font-size:13px;color:#999;margin-top:28px">Reply within one working day</p></div>
+      </div></div><p class="cap">CLOSE: THE LINE ENDS ON THE BUTTON</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 03 THE PIN ON KAMPALA ============ -->
+<div class="row">
+  <div class="label"><b>03</b><h3>The pin on Kampala</h3>
+    <p>Opens on the dark world map of lit roads (already in the repo), headline left, one green pin breathing slowly on Kampala.</p>
+    <p>Scrolling zooms the map into the pin, smoothly, never past it; the pin's label shows the live EAT time. The pin then opens into the two of us, with a thin line to each portrait. The values read like a map legend. The close zooms back out to the world: wherever you are, start here.</p>
+    <p class="k">Fonts</p><p class="fonts">Newsreader (italic), Schibsted Grotesk, Fragment Mono</p>
+    <p class="k">Needs</p><p class="fonts">Uses about/reach-world-network.jpg. Optional: a night aerial of Kampala, no people, for the last zoom step.</p></div>
+  <div class="frames">
+    <div class="top">
+      <div><div class="frame"><div class="s d3" data-nav>
+        <img class="fill" src="../../public/assets/about/reach-world-network.jpg" style="filter:brightness(.8) saturate(.8)">
+        <div class="abs" style="inset:0;background:linear-gradient(90deg,rgba(10,10,10,.92) 0%,rgba(10,10,10,.7) 38%,rgba(10,10,10,.1) 62%)"></div>
+        <div class="abs" style="left:120px;top:270px;width:640px">
+          <p class="m" style="color:var(--brand)">About · Shaun &amp; Noah</p>
+          <h1 style="font-size:124px;line-height:.98;margin-top:26px">Built in<br><i style="color:var(--brand)">Kampala.</i></h1>
+          <p style="font-size:22px;line-height:1.5;color:#c8c8c8;margin-top:32px;max-width:520px">A two-person web and creative studio, working with businesses across Uganda and East Africa.</p>
+        </div>
+        <svg class="abs" width="1440" height="900" style="inset:0"><circle cx="826" cy="472" r="44" fill="none" stroke="#4ade80" stroke-width="1.5" opacity=".35"/><circle cx="826" cy="472" r="22" fill="#4ade80" opacity=".25"/><rect x="820" y="466" width="12" height="12" fill="#4ade80"/></svg>
+        <p class="m abs" style="left:880px;top:462px;font-size:13px;color:#ddd">0.35° N · 32.58° E</p>
+        <p class="hint">SCROLL</p>
+      </div></div><p class="cap">AT REST</p></div>
+      <div><div class="frame"><div class="s d3" data-nav="solid">
+        <img class="fill" src="../../public/assets/about/reach-world-network.jpg" style="filter:brightness(.55) blur(1.5px);transform:scale(4.2);transform-origin:826px 472px">
+        <div class="abs" style="inset:0;background:radial-gradient(circle at 826px 472px,transparent 0,rgba(10,10,10,.35) 260px,rgba(10,10,10,.85) 640px)"></div>
+        <svg class="abs" width="1440" height="900" style="inset:0"><circle cx="826" cy="472" r="120" fill="none" stroke="#4ade80" stroke-width="1.5" opacity=".5"/><circle cx="826" cy="472" r="30" fill="#4ade80" opacity=".22"/><rect x="818" y="464" width="16" height="16" fill="#4ade80"/><line x1="834" y1="472" x2="960" y2="472" stroke="#4ade80" stroke-width="1.5"/></svg>
+        <div class="abs" style="left:976px;top:420px;background:rgba(10,10,10,.85);border:1px solid rgba(74,222,128,.5);padding:20px 24px">
+          <p class="m" style="font-size:13px;color:var(--brand)">Kampala · 16:26 EAT</p>
+          <p class="h" style="font-size:34px;margin-top:10px">One city. One room.<br><i>Two people.</i></p>
+        </div>
+      </div></div><p class="cap">AFTER SCROLL: THE MAP ZOOMS INTO THE PIN</p></div>
+    </div>
+    <div class="bot">
+      <div><div class="frame sm"><div class="s d3" data-nav="solid">
+        <img class="fill" src="../../public/assets/about/reach-world-network.jpg" style="filter:brightness(.18) blur(3px);transform:scale(6);transform-origin:826px 472px">
+        <svg class="abs" width="1440" height="900" style="inset:0"><line x1="720" y1="300" x2="560" y2="300" stroke="#4ade80" stroke-width="1.5"/><line x1="720" y1="300" x2="880" y2="300" stroke="#4ade80" stroke-width="1.5"/><rect x="712" y="292" width="16" height="16" fill="#4ade80"/></svg>
+        <p class="m abs" style="left:0;right:0;top:220px;text-align:center;font-size:13px;color:var(--brand)">From this pin</p>
+        <div class="panel" style="left:140px;top:170px;width:420px;height:470px"><img src="../../public/assets/home/people/shaun-placeholder.webp" style="width:52%"></div>
+        <div class="panel" style="left:880px;top:170px;width:420px;height:470px"><img src="../../public/assets/home/people/noah-placeholder.webp" style="width:58%"></div>
+        <div class="abs" style="left:140px;top:670px;width:420px"><h2 style="font-size:64px"><i>Shaun</i></h2><p style="font-size:20px;color:#bbb;margin-top:8px;line-height:1.4">Design and the creative studio.</p></div>
+        <div class="abs" style="left:880px;top:670px;width:420px"><h2 style="font-size:64px"><i>Noah</i></h2><p style="font-size:20px;color:#bbb;margin-top:8px;line-height:1.4">Engineering, systems and care.</p></div>
+      </div></div><p class="cap">WHO WE ARE: THE PIN OPENS INTO THE TWO OF US</p></div>
+      <div><div class="frame sm"><div class="s d3" data-nav="solid">
+        <h2 class="abs" style="left:120px;top:200px;width:640px;font-size:60px;line-height:1.12">A website should work for you every day <i style="color:var(--brand)">and get better.</i></h2>
+        <div class="abs" style="left:860px;top:190px;width:460px;border:1px solid #333;padding:30px 34px">
+          <p class="m" style="font-size:13px;color:#888">Legend</p>
+          <div style="display:grid;grid-template-columns:24px 1fr;gap:22px 18px;margin-top:26px;align-items:start;font-size:23px">
+            <span style="width:18px;height:18px;background:var(--brand);margin-top:6px"></span><p>Fixed quote first<br><span style="font-size:17px;color:#999">before a line is written</span></p>
+            <span style="width:18px;height:18px;border:2px solid var(--brand);margin-top:6px"></span><p>Talk to the builders<br><span style="font-size:17px;color:#999">two people, direct line</span></p>
+            <span style="width:18px;height:2px;background:var(--brand);margin-top:15px"></span><p>Honest timelines<br><span style="font-size:17px;color:#999">a week for a launch page</span></p>
+            <span style="width:18px;height:18px;border:2px dashed var(--brand);margin-top:6px"></span><p>We stay on<br><span style="font-size:17px;color:#999">care plans from UGX 120,000/mo</span></p>
+          </div>
+        </div>
+      </div></div><p class="cap">HOW WE WORK: VALUES AS A MAP LEGEND</p></div>
+      <div><div class="frame sm"><div class="s d3" data-nav="solid">
+        <img class="fill" src="../../public/assets/about/reach-world-network.jpg" style="filter:brightness(.45) saturate(.7)">
+        <div class="abs" style="inset:0;background:linear-gradient(0deg,rgba(10,10,10,.95) 25%,rgba(10,10,10,.2) 70%)"></div>
+        <svg class="abs" width="1440" height="900" style="inset:0"><circle cx="826" cy="472" r="40" fill="none" stroke="#4ade80" stroke-width="2" opacity=".5"/><rect x="818" y="464" width="16" height="16" fill="#4ade80"/></svg>
+        <div class="abs" style="left:120px;top:560px"><h2 style="font-size:104px;line-height:1">Wherever you are, <i style="color:var(--brand)">start here.</i></h2><p class="btn" style="margin-top:36px;font-family:'Schibsted Grotesk'">Get in touch &rarr;</p></div>
+      </div></div><p class="cap">CLOSE: BACK OUT TO THE WORLD</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 04 THE STUDIO FILE ============ -->
+<div class="row">
+  <div class="label"><b>04</b><h3>The studio file</h3>
+    <p>Typographic, on a faint grid. Headline left, a one-page "studio file" right with its fields still blank and one caret waiting.</p>
+    <p>Scrolling fills the file in, one field at a time (team, city, services, quotes, reply time, care), each underline turning green when done. The founders get two ID cards. How we work reads as four short terms, each ticked as it passes. The close is a line to sign, which goes to /contact.</p>
+    <p class="k">Fonts</p><p class="fonts">Syne, Hanken Grotesk, Spline Sans Mono</p>
+    <p class="k">Needs</p><p class="fonts">No new photos.</p></div>
+  <div class="frames">
+    <div class="top">
+      <div><div class="frame"><div class="s d4 grid-bg" data-nav>
+        <div class="abs" style="left:120px;top:250px;width:560px">
+          <p class="m" style="color:var(--brand)">About</p>
+          <h1 style="font-size:104px;line-height:.98;margin-top:26px">Who's behind <span style="color:var(--brand)">the work.</span></h1>
+          <p style="font-size:22px;line-height:1.5;color:#bbb;margin-top:30px">Everything you'd want to know about S&amp;N Devs, on one page.</p>
+        </div>
+        <div class="abs" style="left:780px;top:190px;width:540px;background:#0f0f0f;border:1px solid #2c2c2c;padding:34px 38px 40px">
+          <div style="display:flex;justify-content:space-between"><p class="m" style="font-size:13px">S&amp;N Devs · studio file</p><p class="m" style="font-size:13px;color:#777">Rev. 11/26</p></div>
+          <div style="margin-top:22px">
+            <div class="field" style="grid-template-columns:160px 1fr"><span class="m">Team</span><span><span class="caret"></span></span></div>
+            <div class="field" style="grid-template-columns:160px 1fr"><span class="m">Based</span><span></span></div>
+            <div class="field" style="grid-template-columns:160px 1fr"><span class="m">Services</span><span></span></div>
+            <div class="field" style="grid-template-columns:160px 1fr"><span class="m">Quotes</span><span></span></div>
+            <div class="field" style="grid-template-columns:160px 1fr"><span class="m">Reply</span><span></span></div>
+            <div class="field" style="grid-template-columns:160px 1fr"><span class="m">After launch</span><span></span></div>
+          </div>
+        </div>
+      </div></div><p class="cap">AT REST</p></div>
+      <div><div class="frame"><div class="s d4 grid-bg" data-nav="solid">
+        <div class="abs" style="left:250px;top:130px;width:940px;background:#0f0f0f;border:1px solid #2c2c2c;padding:36px 44px 40px">
+          <div style="display:flex;justify-content:space-between"><p class="m" style="font-size:14px">S&amp;N Devs · studio file</p><p class="m" style="font-size:14px;color:#777">Rev. 11/26</p></div>
+          <div style="margin-top:18px">
+            <div class="field done"><span class="m">Team</span><span>Two: Shaun &amp; Noah</span><span class="ok">✓</span></div>
+            <div class="field done"><span class="m">Based</span><span>Kampala, Uganda · EAT (UTC+3)</span><span class="ok">✓</span></div>
+            <div class="field done"><span class="m">Services</span><span>Nine, each with a clear price</span><span class="ok">✓</span></div>
+            <div class="field done"><span class="m">Quotes</span><span>Fixed, agreed before a line is written</span><span class="ok">✓</span></div>
+            <div class="field done"><span class="m">Reply</span><span>Within one working day</span><span class="ok">✓</span></div>
+            <div class="field"><span class="m">After launch</span><span>Care plans from UGX 12<span class="caret"></span></span><span></span></div>
+          </div>
+        </div>
+      </div></div><p class="cap">AFTER SCROLL: THE FILE FILLS IN, ONE FIELD AT A TIME</p></div>
+    </div>
+    <div class="bot">
+      <div><div class="frame sm"><div class="s d4 grid-bg" data-nav="solid">
+        <p class="m abs" style="left:120px;top:140px;color:#999">01 · The two of us</p>
+        <div class="abs" style="left:120px;top:200px;width:580px;height:560px;background:#0f0f0f;border:1px solid #2c2c2c;padding:30px">
+          <div class="panel" style="left:30px;top:30px;width:230px;height:300px"><img src="../../public/assets/home/people/shaun-placeholder.webp" style="width:60%"></div>
+          <p class="stamp" style="left:40px;top:290px;font-size:11px">Your photo here</p>
+          <div class="abs" style="left:290px;top:30px;right:30px"><p class="m" style="font-size:12px;color:#777">Name</p><h2 style="font-size:52px;margin-top:4px">Shaun</h2><p class="m" style="font-size:12px;color:#777;margin-top:22px">Leads</p><p style="font-size:21px;margin-top:6px">Design &amp; creative studio</p></div>
+          <div class="abs" style="left:30px;right:30px;top:360px"><p class="m" style="font-size:12px;color:#777">Works on</p><p style="font-size:21px;margin-top:8px;line-height:1.45;color:#ccc">UI, video, presentations and ad creative.</p></div>
+        </div>
+        <div class="abs" style="left:740px;top:200px;width:580px;height:560px;background:#0f0f0f;border:1px solid #2c2c2c;padding:30px">
+          <div class="panel" style="left:30px;top:30px;width:230px;height:300px"><img src="../../public/assets/home/people/noah-placeholder.webp" style="width:66%"></div>
+          <p class="stamp" style="left:40px;top:290px;font-size:11px">Your photo here</p>
+          <div class="abs" style="left:290px;top:30px;right:30px"><p class="m" style="font-size:12px;color:#777">Name</p><h2 style="font-size:52px;margin-top:4px">Noah</h2><p class="m" style="font-size:12px;color:#777;margin-top:22px">Leads</p><p style="font-size:21px;margin-top:6px">Engineering</p></div>
+          <div class="abs" style="left:30px;right:30px;top:360px"><p class="m" style="font-size:12px;color:#777">Works on</p><p style="font-size:21px;margin-top:8px;line-height:1.45;color:#ccc">Web apps, custom systems, care plans and upgrades.</p></div>
+        </div>
+      </div></div><p class="cap">WHO WE ARE: TWO ID CARDS</p></div>
+      <div><div class="frame sm"><div class="s d4 grid-bg" data-nav="solid">
+        <p class="m abs" style="left:120px;top:140px;color:#999">02 · Terms</p>
+        <h2 class="abs" style="left:120px;top:190px;font-size:64px">How we work, <span style="color:var(--brand)">in writing.</span></h2>
+        <div class="abs" style="left:120px;top:330px;width:1200px">
+          <div class="field done" style="grid-template-columns:90px 1fr 60px;font-size:26px"><span class="m">§1</span><span>Fixed quote first. <span style="color:#999">Price agreed before a line is written.</span></span><span class="ok" style="font-size:24px">✓</span></div>
+          <div class="field done" style="grid-template-columns:90px 1fr 60px;font-size:26px"><span class="m">§2</span><span>Talk to the builders. <span style="color:#999">No middle layer.</span></span><span class="ok" style="font-size:24px">✓</span></div>
+          <div class="field" style="grid-template-columns:90px 1fr 60px;font-size:26px"><span class="m">§3</span><span>Honest timelines. <span style="color:#999">Launch pages in about a week.</span></span><span></span></div>
+          <div class="field" style="grid-template-columns:90px 1fr 60px;font-size:26px;opacity:.4"><span class="m">§4</span><span>We stay on. <span style="color:#999">Care plans keep it fast.</span></span><span></span></div>
+        </div>
+      </div></div><p class="cap">HOW WE WORK: FOUR TERMS, TICKED AS THEY PASS</p></div>
+      <div><div class="frame sm"><div class="s d4 grid-bg" data-nav="solid">
+        <div class="abs" style="left:120px;top:220px;width:1200px">
+          <h2 style="font-size:120px;line-height:1">Sign <span style="color:var(--brand)">here.</span></h2>
+          <div style="margin-top:70px;display:grid;grid-template-columns:1fr auto;gap:40px;align-items:end">
+            <div style="border-bottom:2px solid #666;padding-bottom:14px;font-size:30px;color:#666">Your name, and what you're building&hellip;</div>
+            <p class="btn" style="font-family:'Hanken Grotesk'">Start the conversation &rarr;</p>
+          </div>
+          <p class="m" style="font-size:13px;color:#777;margin-top:30px">Countersigned · Shaun · Noah</p>
+        </div>
+      </div></div><p class="cap">CLOSE: A LINE TO SIGN, LEADS TO /CONTACT</p></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const NAV = (solid) => `<div class="nav${solid ? " solid" : ""}"><img src="../../public/logo-mark.svg" alt=""><span class="links"><span>Home</span><span>Services</span><span>Store</span><span class="on">About</span><span>Contact</span></span><span class="pause"></span><span class="cta">GET IN TOUCH</span></div>`;
+  document.querySelectorAll("[data-nav]").forEach((s) => s.insertAdjacentHTML("afterbegin", NAV(s.dataset.nav === "solid")));
+</script>
+</body>
+</html>
